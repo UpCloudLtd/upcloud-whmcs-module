@@ -14,7 +14,7 @@ This is a module for adding UpCloud integration onto WHMCS web hosting platform.
 Download the contents of the modules folder into your WHMCS web directory, for example:
 
 ```
-git clone git@github.com:UpCloudLtd/upcloud-whmcs-module.git ~/
+git clone git@github.com:UpCloudLtd/upcloud-whmcs-module.git ~/upcloud-whmcs-module
 ```
 
 ```
@@ -34,6 +34,8 @@ sudo systemctl reload httpd
 ```
 
 All set! UpCloud can now be found as an infrastructure provider on your WHMCS admin panel. But before you can begin setting up cloud plans, you'll need to configure API access to your UpCloud account if you haven't already done so.
+
+Follow the instructions at our [API tutorial](https://upcloud.com/community/tutorials/getting-started-upcloud-api/) to configure new API credentials for WHMCS.
 
 ## Usage
 
