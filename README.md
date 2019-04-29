@@ -35,7 +35,7 @@ sudo systemctl reload httpd
 
 All set! UpCloud can now be found as an infrastructure provider on your WHMCS admin panel. But before you can begin setting up cloud plans, you'll need to configure API access to your UpCloud account if you haven't already done so.
 
-Follow the instructions at our [API tutorial](https://upcloud.com/community/tutorials/get-started-upcloud-whmcs-module/) to configure new API credentials for WHMCS.
+Follow the instructions at our [API tutorial](https://upcloud.com/community/tutorials/getting-started-upcloud-api/) to configure new API credentials for WHMCS.
 
 ## Usage
 
@@ -78,7 +78,7 @@ With that done, you have your first product now available in your client area.
 
 ## Documentation
 
-The above usage instructions are a quick list of step for configuring services and products on WHMCS for UpCloud. You can find more extensible documentation on how to install WHMCS and the UpCloud module at our [community tutorials](https://upcloud.com/community/tutorials/get-started-whmcs/).
+The above usage instructions are a quick list of step for configuring services and products on WHMCS for UpCloud. You can find more extensible documentation on how to install WHMCS and the UpCloud module at our [community tutorials](https://upcloud.com/community/tutorials/get-started-upcloud-whmcs-module/).
 
 ## Issues
 
