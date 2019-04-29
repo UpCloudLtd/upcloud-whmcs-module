@@ -1,6 +1,6 @@
 # UpCloud WHMCS module
 
-This is a module for adding UpCloud integration onto WHMCS web hosting platform.
+This is a module for adding UpCloud integration onto the WHMCS web hosting platform.
 
 ## Table of content
 * [Installation](#installation)
