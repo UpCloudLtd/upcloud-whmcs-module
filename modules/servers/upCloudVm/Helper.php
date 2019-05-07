@@ -42,13 +42,13 @@ class Helper
      */
     public static function getLang()
     {
-        $languageDir  = dirname(__FILE__).DS.'lang'.DS;
+        $languageDir  = dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR;
         $config       = $GLOBALS['CONFIG'];
         $language     = isset($_SESSION['Language']) ? $_SESSION['Language'] : $config['Language'];
         $languageFile = file_exists($languageDir.$language.'.php') ? $language : 'english';
-        if (file_exists(dirname(__FILE__).DS.'lang'.DS.'english.php'))
+        if (file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'english.php'))
         {
-            include dirname(__FILE__).DS.'lang'.DS.'english.php';
+            include dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'english.php';
         }
 
         require $languageDir.$languageFile.'.php';
