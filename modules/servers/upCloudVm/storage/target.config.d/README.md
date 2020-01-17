@@ -1,1 +1,0 @@
-These directories are required for module information storage but currently contain no files. 
