@@ -10,18 +10,18 @@
             <h4 class="text-center mb-20">{$_LANG['vnc']['title']}</h4> 
             <div style="float:right;">
                 <label for="vnc_status" class="control-label" style="display:inline;float:none;" >{$_LANG['vnc']['status']}</label>
-                <span id="vmStatus" style="font-size: 12px;" class="label label-{if $vm['details']->vnc == 'on'}success{else}danger{/if}">{if $vm['details']->vnc == 'on'}{$_LANG['vnc']['on']}{else}{$_LANG['vnc']['off']}{/if}</span>     
+                <span id="vmStatus" style="font-size: 12px;" class="label label-{if $vm['details']->remote_access_enabled == 'yes'}success{else}danger{/if}">{if $vm['details']->remote_access_enabled == 'yes'}{$_LANG['vnc']['on']}{else}{$_LANG['vnc']['off']}{/if}</span>     
             </div>
             <br>
             <label for="vnc_password" class="control-label" style="display:inline;float:none;" >{$_LANG['vnc']['password']}</label>
-            <input type="text" name="vnc_password" id="vnc_password" value="{$vm['details']->vnc_password}" class="form-control" style="max-width: 400px;"/>
+            <input type="text" name="vnc_password" id="vnc_password" value="{$vm['details']->remote_access_password}" class="form-control" style="max-width: 400px;"/>
             <label for="vnc_host" class="control-label" style="display:inline;float:none;" >{$_LANG['vnc']['address']}</label>
-            <input type="text" id="vnc_host" value="{$vm['details']->vnc_host}" class="form-control" readonly style="max-width: 400px;"/>
+            <input type="text" id="vnc_host" value="{$vm['details']->remote_access_host}" class="form-control" readonly style="max-width: 400px;"/>
             <label for="vnc_port" class="control-label" style="display:inline;float:none;" >{$_LANG['vnc']['port']}</label>
-            <input type="text" id="vnc_port" value="{$vm['details']->vnc_port}" class="form-control" readonly style="max-width: 400px;"/>
+            <input type="text" id="vnc_port" value="{$vm['details']->remote_access_port}" class="form-control" readonly style="max-width: 400px;"/>
             <br>
             <button class="btn btn-primary" id="saveConfiguration"> {$_LANG['vnc']['save']}</button>
-            {if $vm['details']->vnc == 'on'}
+            {if $vm['details']->remote_access_enabled == 'yes'}
             <button class="btn btn-danger" id="disableVNC" style="float:right;"> {$_LANG['vnc']['disable']}</button>     
             <button class="btn btn-success" id="enableVNC" style="float:right;display:none;">{$_LANG['vnc']['enable']}</button> 
             {else}
@@ -92,8 +92,8 @@ function updateDetails()
             var parsed = jQuery.parseJSON(data);
             if(parsed.result == 'success')
             {
-                $('#vnc_port').val(parsed.data.server.vnc_port);
-                $('#vnc_host').val(parsed.data.server.vnc_host);
+                $('#vnc_port').val(parsed.data.server.remote_access_port);
+                $('#vnc_host').val(parsed.data.server.remote_access_host);
             }
         } catch(e) {
     return;

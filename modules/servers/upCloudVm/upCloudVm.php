@@ -6,7 +6,8 @@
  * PHP version 7
  *
  * @author ModulesGarden <contact@modulesgarden.com>
- * @link https://www.modulesgarden.com/
+ *
+ * @see https://www.modulesgarden.com/
  *
  *  * ******************************************************************
  *
@@ -19,16 +20,14 @@
  *
  *  * ******************************************************************
  */
-
-require_once(dirname(__FILE__)."/vendor/autoload.php");
+require_once dirname(__FILE__).'/vendor/autoload.php';
 
 use WHMCS\Database\Capsule;
 use ModulesGarden\upCloudVm\Manager;
 use ModulesGarden\upCloudVm\Helper;
 
-if (!defined("WHMCS"))
- {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 /**
@@ -49,26 +48,23 @@ function upCloudVm_MetaData()
 /**
  * Config options are the module settings defined on a per product basis.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
  *
- * @throws \Exception If server group not set or storage is not writable.
+ * @throws \Exception if server group not set or storage is not writable
  *
  * @return array
  */
 function upCloudVm_ConfigOptions(array $params)
 {
-    if (App::getFromRequest("action") != 'save' && App::getFromRequest("servergroup") == 0)
-    {
-        throw new \Exception("Please select Server Group first");
+    if (App::getFromRequest('action') != 'save' && App::getFromRequest('servergroup') == 0) {
+        throw new \Exception('Please select Server Group first');
     }
 
-    if (App::getFromRequest("action") != 'save' && !Helper::checkStorage())
-    {
-        throw new \Exception("Make sure that ".dirname(__FILE__)."/storage directory is writable");
+    if (App::getFromRequest('action') != 'save' && !Helper::checkStorage()) {
+        throw new \Exception('Make sure that '.dirname(__FILE__).'/storage directory is writable');
     }
 
-    if (!Capsule::schema()->hasTable('mod_upCloudVm'))
-    {
+    if (!Capsule::schema()->hasTable('mod_upCloudVm')) {
         Capsule::schema()->create('mod_upCloudVm', function ($table) {
             $table->increments('id');
             $table->string('serviceId');
@@ -76,8 +72,7 @@ function upCloudVm_ConfigOptions(array $params)
         });
     }
 
-    if (!Capsule::schema()->hasTable('mod_upCloudVm_bandwidth'))
-    {
+    if (!Capsule::schema()->hasTable('mod_upCloudVm_bandwidth')) {
         Capsule::schema()->create('mod_upCloudVm_bandwidth', function ($table) {
             $table->integer('serviceId');
             $table->string('IPv4');
@@ -86,35 +81,36 @@ function upCloudVm_ConfigOptions(array $params)
         });
     }
 
-    $product = WHMCS\Product\Product::find(App::getFromRequest("id"));
+    $product = WHMCS\Product\Product::find(App::getFromRequest('id'));
 
     $server = Capsule::table('tblservers')
         ->join('tblservergroupsrel', 'tblservergroupsrel.serverid', '=', 'tblservers.id')
-        ->where('tblservergroupsrel.groupid', App::getFromRequest("servergroup"))
+        ->where('tblservergroupsrel.groupid', App::getFromRequest('servergroup'))
+        ->where('tblservers.disabled', '0')
         ->first();
 
     $params['serverusername'] = $server->username;
     $params['serverpassword'] = decrypt($server->password);
+    $params['serverhostname'] = $server->hostname;
+    $params['serverip'] = $server->ipaddress;
+    $params['serversecure'] = $server->secure;
 
-    try
-    {
-        $manager   = new Manager($params);
-        $pomPlans  = $pomZones = $pomTemplates = [];
+    try {
+        $manager = new Manager($params);
+        $pomPlans = $pomZones = $pomTemplates = [];
         $templates = $manager->getTemplates()['data']->storages->storage;
-        foreach ($templates as $template)
-        {
+
+        foreach ($templates as $template) {
             $pomTemplates[$template->uuid] = $template->title;
         }
 
         $plans = $manager->getPlans()['data']->plans->plan;
-        foreach ($plans as $plan)
-        {
+        foreach ($plans as $plan) {
             $pomPlans[$plan->name] = $plan->name.' [ '.$plan->storage_tier.' ]';
         }
 
         $zones = $manager->getZones()['data']->zones->zone;
-        foreach ($zones as $zone)
-        {
+        foreach ($zones as $zone) {
             $pomZones[$zone->id] = $zone->description;
         }
 
@@ -123,12 +119,12 @@ function upCloudVm_ConfigOptions(array $params)
        <tr>
        <td class="fieldlabel" width="20%">Configurable Options </td>
        <td class="fieldarea">
-       <a  href="configproducts.php?action=edit&id='.App::getFromRequest("id").'&tab=3&generateFields=configurable" >
+       <a  href="configproducts.php?action=edit&id='.App::getFromRequest('id').'&tab=3&generateFields=configurable" >
        Generate Default</a>
        </td>
        <td class="fieldlabel" width="20%">Custom Fields</td>
        <td class="fieldarea">
-       <a  href="configproducts.php?action=edit&id='.App::getFromRequest("id").'&tab=3&generateFields=custom" >
+       <a  href="configproducts.php?action=edit&id='.App::getFromRequest('id').'&tab=3&generateFields=custom" >
        Generate Default</a>
        </td>
        <tr  style="width:100%;background-color:#BFBFBF;"> <td colspan="4">Main Configuration</td> </tr>
@@ -138,8 +134,7 @@ function upCloudVm_ConfigOptions(array $params)
        <td class="fieldarea">
        <select name="packageconfigoption[1]" class="form-control select-inline">
        ';
-        foreach ($pomZones as $zoneId => $desc)
-        {
+        foreach ($pomZones as $zoneId => $desc) {
             $output .= '<option value="'.$zoneId.'" '.(($zoneId == $product->moduleConfigOption1) ? 'selected' : '').'>'.$desc.'</option>';
         }
 
@@ -148,22 +143,19 @@ function upCloudVm_ConfigOptions(array $params)
        <td class="fieldarea">
        <select name="packageconfigoption[2]" class="form-control select-inline">
        ';
-        foreach ($pomPlans as $planId => $desc)
-        {
+        foreach ($pomPlans as $planId => $desc) {
             $output .= '<option value="'.$planId.'" '.(($planId == $product->moduleConfigOption2) ? 'selected' : '').'>'.$desc.'</option>';
         }
 
         $output .= '</td></tr><tr><td class="fieldlabel" width="20%">Template</td><td class="fieldarea">
        <select name="packageconfigoption[3]" class="form-control select-inline">';
-        foreach ($pomTemplates as $templateId => $desc)
-        {
+        foreach ($pomTemplates as $templateId => $desc) {
             $output .= '<option value="'.$templateId.'" '.(($templateId == $product->moduleConfigOption3) ? 'selected' : '').'>'.$desc.'</option>';
         }
 
         $output .= '</select></td></tr>';
 
-        if (App::getFromRequest("action") != 'save')
-        {
+        if (App::getFromRequest('action') != 'save') {
             ob_clean();
             $data['content'] = $output;
             echo json_encode($data);
@@ -171,15 +163,12 @@ function upCloudVm_ConfigOptions(array $params)
         }
 
         return [
-        "Default Location" => ["Type" => "dropdown", "Options" => $pomZones],
-        "Plan" => ["Type" => "dropdown", "Options" => $pomPlans],
-        "Template" => ["Type" => "dropdown", "Options" => $pomTemplates],
+        'Default Location' => ['Type' => 'dropdown', 'Options' => $pomZones],
+        'Plan' => ['Type' => 'dropdown', 'Options' => $pomPlans],
+        'Template' => ['Type' => 'dropdown', 'Options' => $pomTemplates],
         ];
-    }
-    catch (Exception $e)
-    {
-        if (App::getFromRequest("action") != 'save')
-        {
+    } catch (Exception $e) {
+        if (App::getFromRequest('action') != 'save') {
             throw new \Exception($e->getMessage());
         }
     }
@@ -188,54 +177,51 @@ function upCloudVm_ConfigOptions(array $params)
 /**
  * Test Connection with UpCloud API.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return array
  */
 function upCloudVm_TestConnection(array $params)
 {
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->testConnection();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return [
             'success' => false,
-            'error'   => $e->getMessage()
+            'error' => $e->getMessage(),
         ];
     }
 
-    return [ 'success' => true ];
+    return ['success' => true];
 }
 
 /**
  * Create server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_CreateAccount(array $params)
 {
-    if ($params['status'] != 'Pending' && $params['status'] != 'Terminated')
-    {
+    if ($params['status'] != 'Pending' && $params['status'] != 'Terminated') {
         return 'Cannot create service.';
     }
 
-    try
-    {
-        $manager  = new Manager($params);
+    try {
+        $manager = new Manager($params);
         $response = $manager->createServer();
 
         $postData = [
             'password2' => $response['data']->server->password,
         ];
-        $crypted  = localAPI('EncryptPassword', $postData);
+        $crypted = localAPI('EncryptPassword', $postData);
 
         Capsule::table('mod_upCloudVm')->updateOrInsert(
             ['serviceId' => $params['serviceid']],
             [
-                'serverId' => $response['data']->server->uuid
+                'serverId' => $response['data']->server->uuid,
             ]
         );
 
@@ -243,12 +229,10 @@ function upCloudVm_CreateAccount(array $params)
             ['id' => $params['serviceid']],
             [
                 'username' => 'root',
-                'password' => $crypted['password']
+                'password' => $crypted['password'],
             ]
         );
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -258,25 +242,22 @@ function upCloudVm_CreateAccount(array $params)
 /**
  * Stop and Terminate Server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_TerminateAccount(array $params)
 {
-    if ($params['status'] != 'Active' && $params['status'] != 'Suspended')
-    {
+    if ($params['status'] != 'Active' && $params['status'] != 'Suspended') {
         return 'Cannot terminate service';
     }
 
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->terminateServer();
         Capsule::table('mod_upCloudVm')->where('serviceId', $params['serviceid'])->delete();
         Capsule::table('mod_upCloudVm_bandwidth')->where('serviceId', $params['serviceid'])->delete();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -286,27 +267,23 @@ function upCloudVm_TerminateAccount(array $params)
 /**
  * Stop and Suspend Server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_SuspendAccount(array $params)
 {
-    if ($params['status'] == 'Terminated')
-    {
+    if ($params['status'] == 'Terminated') {
         return 'Cannot suspend terminated service';
     }
 
-    try
-    {
+    try {
         $manager = new Manager($params);
-        $status  = $manager->getServerDetails()['data']->server->state;
-        if ($status == 'started')
-        {
+        $status = $manager->getServerDetails()['data']->server->state;
+        if ($status == 'started') {
             $manager->stopServer();
         }
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -316,27 +293,23 @@ function upCloudVm_SuspendAccount(array $params)
 /**
  * Start and Unsuspend Server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_UnsuspendAccount(array $params)
 {
-    if ($params['status'] == 'Terminated')
-    {
+    if ($params['status'] == 'Terminated') {
         return 'Cannot unsuspend terminated service';
     }
 
-    try
-    {
+    try {
         $manager = new Manager($params);
-        $status  = $manager->getServerDetails()['data']->server->state;
-        if ($status == 'stopped')
-        {
+        $status = $manager->getServerDetails()['data']->server->state;
+        if ($status == 'stopped') {
             $manager->startServer();
         }
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -351,11 +324,11 @@ function upCloudVm_UnsuspendAccount(array $params)
 function upCloudVm_AdminCustomButtonArray()
 {
     return [
-        "Start VM"    => "StartVM",
-        "Stop VM"     => "StopVM",
-        "Shutdown VM" => "ShutdownVM",
-        "Reboot VM"   => "RebootVM",
-        "Refresh"     => "Refresh",
+        'Start VM' => 'StartVM',
+        'Stop VM' => 'StopVM',
+        'Shutdown VM' => 'ShutdownVM',
+        'Reboot VM' => 'RebootVM',
+        'Refresh' => 'Refresh',
     ];
 }
 
@@ -367,39 +340,35 @@ function upCloudVm_AdminCustomButtonArray()
 function upCloudVm_ClientAreaCustomButtonArray()
 {
     return [
-        "Management" => "management",
+        'Management' => 'management',
     ];
 }
 
 /**
  * Admin Area output.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return array
  */
 function upCloudVm_AdminServicesTabFields(array $params)
 {
-    if ($params['status'] != 'Active')
-    {
+    if ($params['status'] != 'Active') {
         return [];
     }
 
-    if (App::getFromRequest("subaction") == 'novnc')
-    {
+    if (App::getFromRequest('subaction') == 'novnc') {
         Helper::runConsole($params);
     }
 
-    try
-    {
+    try {
         $manager = new Manager($params);
         $details = $manager->getServerDetails()['data'];
-        $templ   = $manager->getTemplate();
-        $zones   = $manager->getZones();
+        $templ = $manager->getTemplate();
+        $zones = $manager->getZones();
 
-        foreach ($zones['data']->zones->zone as $zone)
-        {
-            if ($zone->id == $details->server->zone)
-            {
+        foreach ($zones['data']->zones->zone as $zone) {
+            if ($zone->id == $details->server->zone) {
                 $details->server->zone = $zone->description;
                 break;
             }
@@ -409,78 +378,66 @@ function upCloudVm_AdminServicesTabFields(array $params)
         <table class='datatable' 
         style='width:400px; text-align:center;margin-top:20px;border-spacing: 5px;border-collapse: separate;'>
         <tbody>
-        <tr> <th>Hostname</th> <td>".$details->server->hostname."</td> </tr>
-        <tr> <th>Uuid</th> <td>".$details->server->uuid."</td> </tr>
-        <tr> <th>Template</th> <td>".$templ['data']->storage->title."</td> </tr>
-        <tr> <th>Plan</th> <td>".$details->server->plan."</td> </tr>   
-        <tr> <th>Status</th> <td>".$details->server->state."</td> </tr>
-        <tr> <th>Location</th> <td>".$details->server->zone."</td> </tr>
-        </tbody></table>";
+        <tr> <th>Hostname</th> <td>".$details->server->hostname.'</td> </tr>
+        <tr> <th>Uuid</th> <td>'.$details->server->uuid.'</td> </tr>
+        <tr> <th>Template</th> <td>'.$templ['data']->storage->title.'</td> </tr>
+        <tr> <th>Plan</th> <td>'.$details->server->plan.'</td> </tr>   
+        <tr> <th>Status</th> <td>'.$details->server->state.'</td> </tr>
+        <tr> <th>Location</th> <td>'.$details->server->zone.'</td> </tr>
+        </tbody></table>';
 
-        if (!empty($details->server->ip_addresses))
-        {
+        if (!empty($details->server->ip_addresses)) {
             $output .= "<table class='datatable' 
             style='text-align:center;width:400px; margin-top:20px;border-spacing: 5px;
             border-collapse: separate;'><thead><tr><th>IP Address</th><th>Access</th><th>Family</th></tr></thead>
             <tbody>";
-            foreach ($details->server->ip_addresses->ip_address as $ip)
-            {
+            foreach ($details->server->ip_addresses->ip_address as $ip) {
                 $output .= "<tr><td>{$ip->address}</td><td>{$ip->access}</td><td>{$ip->family}</td></tr>";
             }
 
-            $output .= "</tbody></table>";
+            $output .= '</tbody></table>';
         }
 
-        if (!Helper::checkStorage())
-        {
-            $menu['Console'] = "<span style='color:red;'>Make sure that ".dirname(__FILE__)."/storage directory is writable</span>";
-        }
-        else
-        {
-            $menu['Console'] = ($details->server->state == 'started' && $details->server->vnc == 'on') ? '<button class="btn btn-primary" onclick="window.open( window.location.href+\'&subaction=novnc\', \'\',\'width=1024,height=768\'); return false;">Run Console</button>' : "<span style='color:red;'>Server or VNC Console Off</span>";
+        if (!Helper::checkStorage()) {
+            $menu['Console'] = "<span style='color:red;'>Make sure that ".dirname(__FILE__).'/storage directory is writable</span>';
+        } else {
+            $menu['Console'] = ($details->server->state == 'started' && $details->server->remote_access_enabled != 'no') ? '<button class="btn btn-primary" onclick="window.open( window.location.href+\'&subaction=novnc\', \'\',\'width=1024,height=768\'); return false;">Run Console</button>' : "<span style='color:red;'>Server or VNC Console Off</span>";
         }
 
         $menu['VM Informations'] = $output;
+
         return $menu;
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return ['error' => $e->getMessage()];
     }
 }
 
-
 /**
  * Client area management.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return array
  */
 function upCloudVm_ClientArea(array $params)
 {
-    if ($params['status'] != 'Active')
-    {
+    if ($params['status'] != 'Active') {
         return [];
     }
 
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->getServerDetails();
 
-        $action = App::getFromRequest("subaction");
+        $action = App::getFromRequest('subaction');
 
-        if ($action == 'novnc')
-        {
+        if ($action == 'novnc') {
             Helper::RunConsole($params);
-        }
-        elseif (!empty($action))
-        {
+        } elseif (!empty($action)) {
             Helper::ajaxAction($params, $action);
         }
 
-        if (App::getFromRequest("modop") == 'custom' && App::getFromRequest("a") == 'management')
-        {
+        if (App::getFromRequest('modop') == 'custom' && App::getFromRequest('a') == 'management') {
             return;
         }
 
@@ -490,12 +447,10 @@ function upCloudVm_ClientArea(array $params)
             'templatefile' => 'templates/overview.tpl',
             'templateVariables' => [
                 'vm' => Helper::getData($params, 'details'),
-                '_LANG' => Helper::getLang()
+                '_LANG' => Helper::getLang(),
             ],
         ];
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return ['tabOverviewReplacementTemplate' => 'templates/error.tpl'];
     }
 }
@@ -503,21 +458,22 @@ function upCloudVm_ClientArea(array $params)
 /**
  * This function manages client area pages.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return array
  */
 function upCloudVm_management(array $params)
 {
-    try
-    {
+    try {
         Helper::clientAreaPrimarySidebarHook($params);
-        $page           = (!empty(filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING)) ? filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING) : 'editConfiguration');
+        $page = (!empty(filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING)) ? filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING) : 'editConfiguration');
         $productDetails = Capsule::table('tblproductgroups')
             ->join('tblproducts', 'tblproducts.gid', '=', 'tblproductgroups.id')
             ->join('tblhosting', 'tblproducts.id', '=', 'tblhosting.packageid')
             ->where('tblhosting.id', $params['serviceid'])
             ->select('tblproductgroups.name as productGroup', 'tblproducts.name as productName')
             ->first();
+
         return [
             'templatefile' => 'templates/'.$page,
             'templateVariables' => [
@@ -526,12 +482,10 @@ function upCloudVm_management(array $params)
                 'productName' => $productDetails->productName,
                 'domain' => $params['domain'],
                 'vm' => Helper::getData($params, $page),
-                '_LANG' => Helper::getLang()
+                '_LANG' => Helper::getLang(),
             ],
         ];
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return ['templatefile' => 'templates/error'];
     }
 }
@@ -539,18 +493,16 @@ function upCloudVm_management(array $params)
 /**
  * Starts server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_StartVM(array $params)
 {
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->startServer();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -560,18 +512,16 @@ function upCloudVm_StartVM(array $params)
 /**
  * Soft stops server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_StopVM(array $params)
 {
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->stopServer();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -581,18 +531,16 @@ function upCloudVm_StopVM(array $params)
 /**
  * Hard stops server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_ShutdownVM(array $params)
 {
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->forceStopServer();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -602,18 +550,16 @@ function upCloudVm_ShutdownVM(array $params)
 /**
  * Restart server.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_RebootVM(array $params)
 {
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->rebootServer();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -623,18 +569,16 @@ function upCloudVm_RebootVM(array $params)
 /**
  * Upgrade server's plan.
  *
- * @param array $params WHMCS Params.
+ * @param array $params WHMCS Params
+ *
  * @return string
  */
 function upCloudVm_ChangePackage(array $params)
 {
-    try
-    {
+    try {
         $manager = new Manager($params);
         $manager->upgradePlan();
-    }
-    catch (\Exception $e)
-    {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 
@@ -642,7 +586,7 @@ function upCloudVm_ChangePackage(array $params)
 }
 
 /**
- * Refresh Admin Area
+ * Refresh Admin Area.
  *
  * @return string
  */

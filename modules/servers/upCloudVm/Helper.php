@@ -88,7 +88,11 @@ class Helper
         {
             Capsule::table('tblcustomfields')
                 ->updateOrInsert(['type' => 'product', 'relid' => $product->id, 'fieldname' => 'SSHKey|SSH Key'], ['showorder' => 'on', 'fieldtype' => 'textarea']);
-            header("Location: configproducts.php?action=edit&id=".\App::getFromRequest("id")."&tab=4");
+                Capsule::table('tblcustomfields')
+                ->updateOrInsert(['type' => 'product', 'relid' => $product->id, 'fieldname' => 'initialization|Initialization Script'], ['showorder' => 'on', 'fieldtype' => 'textarea']);
+         
+
+                header("Location: configproducts.php?action=edit&id=".\App::getFromRequest("id")."&tab=4");
             die;
         }
 
@@ -296,6 +300,13 @@ class Helper
                             }
                         }
 
+                        $vnc = $details->remote_access_enabled;
+                        if ($vnc == 'yes') {
+                            $vnc = 'on';
+                        } else {
+                            $vnc = 'off';
+                        }
+
                         $data['details'] = [
                             'hostname' => $details->hostname,
                             'ip' => $details->ip,
@@ -304,10 +315,10 @@ class Helper
                             'template' => $templ['data']->storage->title,
                             'status' => $details->state,
                             'location' => $details->zone,
-                            'vnc' => $details->vnc,
-                            'vnc_host' => $details->vnc_host,
-                            'vnc_port' => $details->vnc_port,
-                            'vnc_password' => $details->vnc_password,
+                            'vnc' => $vnc,
+                            'vnc_host' => $details->remote_access_host,
+                            'vnc_port' => $details->remote_access_port,
+                            'vnc_password' => $details->remote_access_password,
                         ];
 
                         $ips = [];
