@@ -18,7 +18,7 @@ git clone https://github.com/UpCloudLtd/upcloud-whmcs-module.git ~/upcloud-whmcs
 ```
 
 ```
-sudo cp ~/upcloud-whmcs-module/modules/servers/upCloudVm /var/www/html/whmcs/modules/servers/
+sudo cp -r ~/upcloud-whmcs-module/modules/servers/upCloudVm /var/www/html/whmcs/modules/servers/
 ```
 
 Then update the permissions to allow the web server user to make changes.
