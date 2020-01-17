@@ -6,7 +6,8 @@
  * PHP version 7
  *
  * @author ModulesGarden <contact@modulesgarden.com>
- * @link https://www.modulesgarden.com/
+ *
+ * @see https://www.modulesgarden.com/
  *
  *  * ******************************************************************
  *
@@ -24,82 +25,77 @@ namespace ModulesGarden\upCloudVm;
 
 use WHMCS\View\Menu\Item as MenuItem;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use ModulesGarden\upCloudVm\Manager;
 
 /**
- * Helper
+ * Helper.
  *
  * @author ModulesGarden <contact@modulesgarden.com>
- * @link https://www.modulesgarden.com/
+ *
+ * @see https://www.modulesgarden.com/
  * Helper Methods.
  */
 class Helper
 {
-
     /**
      * Loads lang file.
+     *
      * @return array
      */
     public static function getLang()
     {
-        $languageDir  = dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR;
-        $config       = $GLOBALS['CONFIG'];
-        $language     = isset($_SESSION['Language']) ? $_SESSION['Language'] : $config['Language'];
+        $languageDir = dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR;
+        $config = $GLOBALS['CONFIG'];
+        $language = isset($_SESSION['Language']) ? $_SESSION['Language'] : $config['Language'];
         $languageFile = file_exists($languageDir.$language.'.php') ? $language : 'english';
-        if (file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'english.php'))
-        {
+        if (file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'english.php')) {
             include dirname(__FILE__).DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'english.php';
         }
 
         require $languageDir.$languageFile.'.php';
+
         return isset($_LANG) ? $_LANG : [];
     }
 
     /**
      * Check if storage is writable for console usage.
-     * @return boolean
+     *
+     * @return bool
      */
     public static function checkStorage()
     {
-        $file     = dirname(__FILE__)."/storage/target.config.d/test";
-        $fileOpen = fopen($file, "w+");
-        if (!$fileOpen)
-        {
+        $file = dirname(__FILE__).'/storage/target.config.d/test';
+        $fileOpen = fopen($file, 'w+');
+        if (!$fileOpen) {
             return false;
         }
 
         fclose($fileOpen);
         unlink($file);
+
         return true;
     }
 
     /**
      * This function generates required configurable options and custom fields.
      *
-     * @param string $field Field name.
-     *
-     * @return void
+     * @param string $field field name
      */
     public static function generateFields(string $field = '')
     {
         $product = \WHMCS\Product\Product::find(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
 
-        if ($field == 'custom')
-        {
+        if ($field == 'custom') {
             Capsule::table('tblcustomfields')
                 ->updateOrInsert(['type' => 'product', 'relid' => $product->id, 'fieldname' => 'SSHKey|SSH Key'], ['showorder' => 'on', 'fieldtype' => 'textarea']);
-                Capsule::table('tblcustomfields')
+            Capsule::table('tblcustomfields')
                 ->updateOrInsert(['type' => 'product', 'relid' => $product->id, 'fieldname' => 'initialization|Initialization Script'], ['showorder' => 'on', 'fieldtype' => 'textarea']);
-         
 
-                header("Location: configproducts.php?action=edit&id=".\App::getFromRequest("id")."&tab=4");
+            header('Location: configproducts.php?action=edit&id='.\App::getFromRequest('id').'&tab=4');
             die;
         }
 
-        if ($field == 'configurable')
-        {
-            try
-            {
+        if ($field == 'configurable') {
+            try {
                 $server = Capsule::table('tblservers')
                     ->join('tblservergroupsrel', 'tblservergroupsrel.serverid', '=', 'tblservers.id')
                     ->where('tblservergroupsrel.groupid', $product->serverGroup)
@@ -107,23 +103,24 @@ class Helper
 
                 $params['serverusername'] = $server->username;
                 $params['serverpassword'] = decrypt($server->password);
+                $params['serverhostname'] = $server->hostname;
+                $params['serverip'] = $server->ipaddress;
+                $params['serversecure'] = $server->secure;
 
-                $manager  = new Manager($params);
+                $manager = new Manager($params);
                 $pomZones = $manager->getZones()['data']->zones->zone;
-                foreach ($pomZones as $pomZone)
-                {
+                foreach ($pomZones as $pomZone) {
                     $zones[$pomZone->id] = $pomZone->description;
                 }
 
-                if (empty($zones) || empty($product))
-                {
+                if (empty($zones) || empty($product)) {
                     return;
                 }
 
                 Capsule::table('tblproductconfiggroups')
-                    ->updateOrInsert(['name' => "Configurable options for UpCloud"], ['description' => 'Auto generated by module']);
+                    ->updateOrInsert(['name' => 'Configurable options for UpCloud'], ['description' => 'Auto generated by module']);
 
-                $groupId = Capsule::table('tblproductconfiggroups')->where('name', "Configurable options for UpCloud")->first()->id;
+                $groupId = Capsule::table('tblproductconfiggroups')->where('name', 'Configurable options for UpCloud')->first()->id;
 
                 Capsule::table('tblproductconfiglinks')
                     ->updateOrInsert(['gid' => $groupId, 'pid' => $product->id], ['gid' => $groupId, 'pid' => $product->id]);
@@ -131,12 +128,12 @@ class Helper
                 Capsule::table('tblproductconfigoptions')->updateOrInsert(
                     [
                         'gid' => $groupId,
-                        'optionname' => 'Storage'
+                        'optionname' => 'Storage',
                     ],
                     [
                         'optiontype' => 4,
                         'qtyminimum' => 10,
-                        'qtymaximum' => 1024
+                        'qtymaximum' => 1024,
                     ]
                 );
 
@@ -146,83 +143,71 @@ class Helper
                     ->updateOrInsert(['gid' => $groupId, 'optionname' => 'Location'], ['optiontype' => 1]);
 
                 $optionId = Capsule::table('tblproductconfigoptions')
-                    ->where('gid', $groupId)->where('optionname', "Storage")->first()->id;
+                    ->where('gid', $groupId)->where('optionname', 'Storage')->first()->id;
 
                 Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => 'GB'], ['configid' => $optionId]);
 
                 $ids = Capsule::table('tblproductconfigoptionssub')->where('configid', $optionId)->get();
-                foreach ($ids as $id)
-                {
+                foreach ($ids as $id) {
                     Capsule::table('tblpricing')
                         ->updateOrInsert(
-                            ['type' => 'configoptions','relid' => $id->id],
+                            ['type' => 'configoptions', 'relid' => $id->id],
                             ['currency' => $currencyId]
                         );
                 }
 
                 $optionId = Capsule::table('tblproductconfigoptions')
-                    ->where('gid', $groupId)->where('optionname', "Location")->first()->id;
+                    ->where('gid', $groupId)->where('optionname', 'Location')->first()->id;
 
-                foreach ($zones as $zon => $val)
-                {
+                foreach ($zones as $zon => $val) {
                     Capsule::table('tblproductconfigoptionssub')
                         ->updateOrInsert(['optionname' => $zon.'|'.$val], ['configid' => $optionId]);
                 }
 
                 $ids = Capsule::table('tblproductconfigoptionssub')->where('configid', $optionId)->get();
-                foreach ($ids as $id)
-                {
+                foreach ($ids as $id) {
                     Capsule::table('tblpricing')
                         ->updateOrInsert(
-                            ['type' => 'configoptions','relid' => $id->id],
+                            ['type' => 'configoptions', 'relid' => $id->id],
                             ['currency' => $currencyId]
                         );
                 }
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 return;
             }
 
-            header("Location: configproducts.php?action=edit&id=".\ App::getFromRequest("id")."&tab=5");
+            header('Location: configproducts.php?action=edit&id='.\ App::getFromRequest('id').'&tab=5');
             die;
         }
 
-        header("Location: configproducts.php?action=edit&id=".\App::getFromRequest("id")."&tab=3");
+        header('Location: configproducts.php?action=edit&id='.\App::getFromRequest('id').'&tab=3');
         die;
     }
 
     /**
      * Ajax actions manager.
-     * @param array  $params WHMCS Params.
-     * @param string $action Manager Method.
      *
-     * @return void
+     * @param array  $params WHMCS Params
+     * @param string $action manager Method
      */
     public static function ajaxAction(array $params, string $action)
     {
         ob_clean();
-        try
-        {
+        try {
             $manager = new Manager($params);
-            $_LANG   = self::getLang();
+            $_LANG = self::getLang();
 
-            if (method_exists($manager, $action))
-            {
-                $results            = $manager->$action();
+            if (method_exists($manager, $action)) {
+                $results = $manager->$action();
                 $results['message'] = (!empty($_LANG['ajax'][$action])) ? $_LANG['ajax'][$action] : $_LANG['ajax']['action']['success'];
-            }
-            else
-            {
-                $results['result']  = 'failure';
+            } else {
+                $results['result'] = 'failure';
                 $results['message'] = $_LANG['ajax']['action']['not_valid'];
             }
 
             echo json_encode($results);
             die;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             echo json_encode(['result' => 'failure', 'message' => $e->getMessage()]);
             die;
         }
@@ -230,38 +215,33 @@ class Helper
 
     /**
      * Opens NO-VNC Console.
-     * @param array $params WHMCS Params.
      *
-     * @return void
+     * @param array $params WHMCS Params
      */
     public static function runConsole(array $params)
     {
         ob_clean();
-        try
-        {
-            $manager  = new Manager($params);
+        try {
+            $manager = new Manager($params);
             $response = $manager->getServerDetails();
-            $details  = $response['data']->server;
-            if ($details->state != 'started')
-            {
+            $details = $response['data']->server;
+            if ($details->state != 'started') {
                 echo 'Server is not online';
                 die();
             }
 
-            $token   = md5(uniqid((string) rand(), true));
-            $file    = dirname(__FILE__)."/storage/target.config.d/".$token;
+            $token = md5(uniqid((string) rand(), true));
+            $file = dirname(__FILE__).'/storage/target.config.d/'.$token;
             $content = $token.': '.$details->vnc_host.':'.$details->vnc_port;
-            $fop     = fopen($file, "w+");
+            $fop = fopen($file, 'w+');
             fwrite($fop, $content);
             fclose($fop);
 
             $protocol = (filter_input(INPUT_SERVER, 'HTTPS', FILTER_SANITIZE_STRING) == 'on') ? 'https://' : 'http://';
-            $src      = $protocol.filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING).':45969/vnc.html?autoconnect=true&password='.$details->vnc_password.'&path=?token='.$token;
+            $src = $protocol.filter_input(INPUT_SERVER, 'HTTP_HOST', FILTER_SANITIZE_STRING).':45969/vnc.html?autoconnect=true&password='.$details->vnc_password.'&path=?token='.$token;
             echo '<iframe src="'.$src.'" scrolling="auto" height="100%" width="100%" frameborder="0"></iframe><style>body{margin:0px;}</style>';
             die();
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             echo $e->getMessage();
             die();
         }
@@ -269,32 +249,28 @@ class Helper
 
     /**
      * Gather necessary data for specific client area page.
-     * @param array  $params WHMCS Params.
-     * @param string $page   Client Area Page.
+     *
+     * @param array  $params WHMCS Params
+     * @param string $page   client Area Page
      *
      * @return array
      */
     public static function getData(array $params, string $page)
     {
-        try
-        {
+        try {
             $manager = new Manager($params);
-            switch ($page)
-            {
+            switch ($page) {
                 case 'details':
                     $details = $manager->getServerDetails();
 
-                    if ($details['result'] == 'success')
-                    {
+                    if ($details['result'] == 'success') {
                         $details = $details['data']->server;
 
                         $templ = $manager->getTemplate();
                         $zones = $manager->getZones();
 
-                        foreach ($zones['data']->zones->zone as $zone)
-                        {
-                            if ($zone->id == $details->zone)
-                            {
+                        foreach ($zones['data']->zones->zone as $zone) {
+                            if ($zone->id == $details->zone) {
                                 $details->zone = $zone->description;
                                 break;
                             }
@@ -323,12 +299,9 @@ class Helper
 
                         $ips = [];
 
-                        if (!empty($details->ip_addresses))
-                        {
-                            foreach ($details->ip_addresses->ip_address as $ip)
-                            {
-                                if ($ip->access == 'public' && $ip->family == 'IPv4')
-                                {
+                        if (!empty($details->ip_addresses)) {
+                            foreach ($details->ip_addresses->ip_address as $ip) {
+                                if ($ip->access == 'public' && $ip->family == 'IPv4') {
                                     $data['details']['ip'] = $ip->address;
                                 }
 
@@ -344,20 +317,18 @@ class Helper
                     }
                     break;
                 case 'editConfiguration':
-                    $data['details']   = $manager->getServerDetails()['data']->server;
+                    $data['details'] = $manager->getServerDetails()['data']->server;
                     $data['timezones'] = $manager->getTimezones()['data']->timezones->timezone;
                     break;
                 case 'vncconsole':
                     $data['details'] = $manager->getServerDetails()['data']->server;
                     break;
                 case 'snapshotsManagement':
-                    $data['details']       = $manager->getStorageDetails()['data']->storage->backup_rule;
+                    $data['details'] = $manager->getStorageDetails()['data']->storage->backup_rule;
                     $data['details']->time = ($data['details']->time == '0000') ? '00' : str_replace('0', '', $data['details']->time);
                     break;
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return [];
         }
 
@@ -366,36 +337,31 @@ class Helper
 
     /**
      * Adds Client Area Primary Sidebar Hook with additional sidebar options.
-     * @param array $params WHMCS Params.
      *
-     * @return void
+     * @param array $params WHMCS Params
      */
     public static function clientAreaPrimarySidebarHook(array $params)
     {
         add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) use ($params) {
             $_LANG = Helper::getLang();
             $panel = $primarySidebar->getChild('Service Details Overview');
-            if (is_a($panel, 'WHMCS\View\Menu\Item'))
-            {
+            if (is_a($panel, 'WHMCS\View\Menu\Item')) {
                 $panel = $panel->getChild('Information');
-                if (is_a($panel, 'WHMCS\View\Menu\Item'))
-                {
+                if (is_a($panel, 'WHMCS\View\Menu\Item')) {
                     $panel->setUri("clientarea.php?action=productdetails&id={$params['serviceid']}");
                     $panel->setAttributes([]);
                 }
             }
 
-            if ($params['status'] == "Active")
-            {
+            if ($params['status'] == 'Active') {
                 $manageVm = $primarySidebar->addChild('ManageVM', [
                     'label' => $_LANG['manageVM'],
                     'uri' => '#',
                     'order' => '100',
-                    'icon' => 'fa-bars'
+                    'icon' => 'fa-bars',
                 ]);
 
-                if (!empty($manageVm))
-                {
+                if (!empty($manageVm)) {
                     $manageVm->addChild('editConfiguration')
                         ->setLabel($_LANG['server']['title'])
                         ->setUri('clientarea.php?action=productdetails&amp;id='.$params['serviceid'].'&amp;modop=custom&a=management&page=editConfiguration')
