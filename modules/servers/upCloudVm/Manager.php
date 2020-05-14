@@ -150,15 +150,7 @@ class Manager
         $zone = ($this->params['configoptions']['Location'] == '') ? $this->params['configoption1'] : $this->params['configoptions']['Location'];
         $size = ($this->params['configoptions']['Storage'] == '') ? 10 : $this->params['configoptions']['Storage'];
 
-        $hddAvaliable = ['fi-hel', 'sg-sin', 'uk-lon'];
         $tier = 'maxiops';
-
-        foreach ($hddAvaliable as $zon) {
-            if (strpos($zone, $zon) !== false) {
-                $tier = 'hdd';
-                break;
-            }
-        }
 
         if (empty($this->params['domain'])) {
             $this->params['domain'] = '127.0.0.1';
