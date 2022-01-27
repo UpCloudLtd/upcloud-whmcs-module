@@ -2,7 +2,10 @@
 
 This is a module for adding UpCloud integration onto the WHMCS web hosting platform.
 
-**NOTE:** this module is an experimental one and not officially supported by UpCloud. If you notice anything not working as it should please open a new github -issue.
+**NOTE:** this module is an experimental one and not officially supported by UpCloud. If you notice anything not working as it should please open a new github -issue. Newest module is available at:
+
+https://github.com/UpCloudLtd/upcloud-whmcs-module/commit/10e5481a7d2a7048d530abc87f842b37da5f2b65#diff-0565ea2a1eb0870e174a5adf0e57a12a703d8c9727f67beac69a318b23a6800d 
+
 ## Table of content
 * [Installation](#installation)
 * [Usage](#usage)
