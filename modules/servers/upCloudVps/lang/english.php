@@ -10,7 +10,7 @@ $_LANG["location"] = "Location";
 $_LANG["sshRsa"] = "Provide SSH public key in OpenSSH format";
 $_LANG["userData"] = "Cloud-init script for early initialization of cloud instances";
 $_LANG["Hostname"] = "Hostname";
-$_LANG["VMId"] = "VM Id";
+$_LANG["VMId"] = "Server ID";
 $_LANG["Template"] = "Template";
 $_LANG["Plan"] = "Plan";
 $_LANG["Status"] = "Status";
@@ -19,11 +19,11 @@ $_LANG["IPAddress"] = "IP Address";
 $_LANG["Access"] = "Access";
 $_LANG["Family"] = "Family";
 $_LANG["Interface"] = "Interface";
-$_LANG["VmInfo"] = "VM Informations";
-$_LANG["vncEnabled"] = "vnc Enabled";
-$_LANG["vncPassword"] = "vnc Password";
-$_LANG["vncPort"] = "vnc Port";
-$_LANG["vncHost"] = "vnc Host";
+$_LANG["VmInfo"] = "Server Information";
+$_LANG["vncEnabled"] = "VNC Enabled";
+$_LANG["vncPassword"] = "VNC Password";
+$_LANG["vncPort"] = "VNC Port";
+$_LANG["vncHost"] = "VNC Host";
 $_LANG["reversePTR"] = "Reverse PTR";
 $_LANG["TotalTraffic"] = "Total Traffic";
 $_LANG["used"] = "Used";
@@ -39,7 +39,7 @@ $_LANG['status']['error']       = 'Error';
 $_LANG['ajax']['action']['not_valid'] = 'Action not valid';
 $_LANG['ajax']['action']['success']   = 'Action completed successfully';
 $_LANG['ajax']['unknown']             = 'Unknown error';
-$_LANG['ajax']['StartServer']         = 'The container has been booted successfully';
+$_LANG['ajax']['StartServer']         = 'The server has been started successfully';
 $_LANG['ajax']['RestartServer']        = 'Reboot signal has been sent successfully';
 $_LANG['ajax']['StopServer']          = 'Stop signal has been sent successfully';
 $_LANG['ajax']['refreshServer']       = 'Refresh signal has been sent successfully';
@@ -54,8 +54,8 @@ $_LANG["password"] = "Password";
 $_LANG["username"] = "Username";
 $_LANG["IPAddresses"] = "IP Addresses";
 $_LANG["Action"] = "Action";
-$_LANG["basicdetails"] = "VPS Basic Required Information";
-$_LANG["basicdescription"] = "Here are the essential day-to-day details you should keep readily accessible for connecting to your VPS whenever the need arises.";
+$_LANG["basicdetails"] = "Server Basic Required Information";
+$_LANG["basicdescription"] = "Here are the essential day-to-day details you should keep readily accessible for connecting to your server whenever the need arises.";
 
 
 ///vnc
@@ -78,14 +78,14 @@ $_LANG['ajax']['changeVNCStatus']      = "VNC Status has been changed successful
 $_LANG['network']['title']       = 'Network Management';
 $_LANG['network']['description'] = 'You have the capability to handle your IP addresses, including configuring reverse PTR records for both IPv4 and IPv6 addresses.';
 $_LANG['ip']['rdn']              = 'Reverse DNS Name';
-$_LANG['ip']['editRdn']          = 'Edit Reverse Dns Name for: ';
+$_LANG['ip']['editRdn']          = 'Edit Reverse DNS Name For: ';
 $_LANG['ip']['close']            = 'Close';
 $_LANG['ip']['save']             = 'Save Changes';
 
 
 //server
 $_LANG['server']['title']                 = 'Server Configuration';
-$_LANG['server']['description']           = 'Your Server configuration can be updated here. By adjusting default configurations, you\'re making changes that could potentially disrupt the typical behavior of your VPS.';
+$_LANG['server']['description']           = 'Your server configuration can be updated here. By adjusting default configurations, you\'re making changes that could potentially disrupt the typical behavior of your server.';
 $_LANG['server']['edit']                  = 'Edit Server Configuration';
 $_LANG['server']['hostname']              = 'Hostname';
 $_LANG['server']['display']               = 'Display Adapter';
@@ -93,10 +93,10 @@ $_LANG['server']['network']               = 'Network Adapter';
 $_LANG['server']['timezone']              = 'Timezone';
 $_LANG['server']['boot']                  = 'Boot Order';
 $_LANG['server']['save']                  = 'Save Configuration';
-$_LANG['ajax']['saveServerConfiguration'] = "Server Configuration has been saved successfully";
+$_LANG['ajax']['saveServerConfiguration'] = "Server configuration has been saved successfully";
 
 
 $_LANG["custom"] = "Custom";
-$_LANG["custDesc"] = "user Supplied Plans";
+$_LANG["custDesc"] = "User Supplied Plans";
 $_LANG['bandwidth']['title']       = 'Bandwidth Graphs';
-$_LANG['bandwidth']['description'] = 'Your Server usage over time can be viewed here.';
+$_LANG['bandwidth']['description'] = 'Your server usage over time can be viewed here.';
