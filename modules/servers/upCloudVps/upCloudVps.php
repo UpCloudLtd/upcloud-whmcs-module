@@ -14,7 +14,7 @@ use WHMCS\Module\Server\upCloudVps\configOptions;
 function upCloudVps_MetaData()
 {
     return [
-        'DisplayName' => 'upCloud VPS',
+        'DisplayName' => 'UpCloud Server',
         'APIVersion' => '1.3',
         'ServiceSingleSignOnLabel' => 'Login to Panel as User',
         'RequiresServer' => true,
