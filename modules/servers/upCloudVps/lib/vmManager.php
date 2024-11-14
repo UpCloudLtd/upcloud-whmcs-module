@@ -111,7 +111,7 @@ class vmManager
     $ip = $this->params['ip'];
     $DNSValue = $this->params['rdns'];
     $instanceId = $this->params['model']->serviceProperties->get('instanceId|instance Id');
-    $data = $this->manager->ModifyIPaddress($instanceId, $rDNSIP, $DNSValue);
+    $data = $this->manager->ModifyIPaddress($instanceId, $ip, $DNSValue);
     return $data['response_code'] == "202" ? 'success' : $data['response']['error']['error_message'];
   }
 
