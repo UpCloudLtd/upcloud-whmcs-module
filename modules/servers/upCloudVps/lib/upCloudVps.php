@@ -3,6 +3,8 @@ namespace WHMCS\Module\Server\upCloudVps;
 if (!defined("WHMCS")) {die("This file cannot be accessed directly");}
 use WHMCS\Database\Capsule;
 
+define('MODULE_VERSION', '2.0.0-pre');
+
 class upCloudVps
 {
   private $curl;
@@ -16,6 +18,7 @@ class upCloudVps
       $this->baseUrl = 'https://api.upcloud.com/1.3/';
       $this->curl = curl_init();
       curl_setopt_array($this->curl, [
+        CURLOPT_USERAGENT => 'upcloud-whmcs-module/' . MODULE_VERSION,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_USERPWD => $user . ':' . $password,
       ]);
