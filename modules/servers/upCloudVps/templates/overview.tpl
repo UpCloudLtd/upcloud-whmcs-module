@@ -211,8 +211,6 @@ border-radius:0px" class="alert alert-danger collapse alertUpCloud">
     <select name="networkAdapter" id="networkAdapter" style="max-width: 400px;" class="form-control">
         <option value="e1000" {if $vm['details']['nic_model'] == 'e1000'} selected {/if}>Intel E1000 emulation</option>
         <option value="virtio" {if $vm['details']['nic_model'] == 'virtio'} selected {/if}>VirtIO</option>
-        <option value="scsi" {if $vm['details']['nic_model'] == 'scsi'} selected {/if}>SCSI</option>
-        <option value="ide" {if $vm['details']['nic_model'] == 'ide'} selected {/if}>ide</option>
         <option value="rtl8139" {if $vm['details']['nic_model'] == 'rtl8139'} selected {/if}>RealTek RTL8139 emulation</option>
     </select>
 
