@@ -147,9 +147,9 @@ function upCloudVps_TestConnection(array $params)
   function upCloudVps_AdminCustomButtonArray()
   {
       return [
-          'Start VPS' => 'StartVPS',
-          'Stop VPS' => 'StopVPS',
-          'Reboot VPS' => 'RebootVPS',
+          'Start' => 'StartVPS',
+          'Stop' => 'StopVPS',
+          'Reboot' => 'RebootVPS',
       ];
   }
 
