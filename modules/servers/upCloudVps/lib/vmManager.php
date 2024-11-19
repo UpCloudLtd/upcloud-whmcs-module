@@ -66,7 +66,7 @@ class vmManager
     $sshkey = empty($sshkey) ? "na" : $sshkey;
     $user_data = empty($user_data) ? "na" : $user_data;
     $backup = $this->params['configoptions']['backup'];
-    $networking = $this->params['configoptions']['ipaddress'];
+    $networking = "ipv4only";
 
     if($Plan == "custom"){
       $ram = $this->params['configoptions']['ram'];
