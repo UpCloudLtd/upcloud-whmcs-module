@@ -62,7 +62,7 @@ class vmManager
     $OsUUID = $this->params['configoptions']['template'] ?? $this->params['configoption3'];
     $sshkey = $this->params['customfields']['ssh_key'];
     $user_data = $this->params['customfields']['userData'];
-    $Hostname = $this->params['domain'] ?? 'client' . $this->params['serviceid'] . '.' . $_SERVER['SERVER_NAME'];
+    $Hostname = !empty($this->params['domain']) ? $this->params['domain'] : 'client' . $this->params['serviceid'] . '.' . $_SERVER['SERVER_NAME'];
     $sshkey = empty($sshkey) ? "na" : $sshkey;
     $user_data = empty($user_data) ? "na" : $user_data;
     $backup = $this->params['configoptions']['backup'];
