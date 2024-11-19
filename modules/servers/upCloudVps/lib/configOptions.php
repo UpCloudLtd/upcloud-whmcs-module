@@ -37,13 +37,6 @@ class configOptions{
     ];
   }
 
-  private function getNetworking()
-  {
-      $nw['ipv4only'] = "Public IPv4 Only";
-      $nw['default'] = "Public Default (IPv4, IPv6 & Utility)";
-      return $nw;
-  }
-
   private function createCustomConfigurableOptions($product)
   {
     $currencyId = Capsule::table('tblcurrencies')->where('default', '1')->first()->id;
@@ -78,7 +71,6 @@ class configOptions{
         $this->createLocationFields($groupId, $zones, $currencyId);
         $this->createTemplateFields($groupId, $pomTemplates, $currencyId, $currencyCode);
         $this->createBackupFields($groupId, $this->getBackups());
-        $this->createIPFields($groupId, $this->getNetworking());
     }
   }
 
