@@ -32,16 +32,7 @@ class configOptions{
     'Default Location' => ['Type' => 'dropdown', 'Options' => $this->getZoneLocation()],
     'Plan' => ['Type' => 'dropdown', 'Options' => $this->getVmplans()],
     'Template' => ['Type' => 'dropdown', 'Options' => $this->getTemplateIds()],
-    //'Backup' => ['Type' => 'dropdown', 'Options' => $this->getBackups()],
-    //'Networking' => ['Type' => 'dropdown', 'Options' => $this->getNetworking()],
     ];
-  }
-
-  private function getNetworking()
-  {
-      $nw['ipv4only'] = "Public IPv4 Only";
-      $nw['default'] = "Public Default (IPv4, IPv6 & Utility)";
-      return $nw;
   }
 
   private function createCustomConfigurableOptions($product)
@@ -78,7 +69,6 @@ class configOptions{
         $this->createLocationFields($groupId, $zones, $currencyId);
         $this->createTemplateFields($groupId, $pomTemplates, $currencyId, $currencyCode);
         $this->createBackupFields($groupId, $this->getBackups());
-        $this->createIPFields($groupId, $this->getNetworking());
     }
   }
 
@@ -87,16 +77,6 @@ class configOptions{
     if(!$optionId){
       $optionId = Capsule::table('tblproductconfigoptions')->insertGetId(['gid' => $groupId, 'optionname' => 'backup|Backup', 'optiontype' => 1]);
       foreach ($backup as $id => $val) {
-          Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => $id.'|'.$val], ['configid' => $optionId]);
-      }
-    }
-  }
-
-  private function createIPFields($groupId, $ips){
-    $optionId = Capsule::table('tblproductconfigoptions')->where('gid', $groupId)->where('optionname', 'ipaddress|IP Address')->first()->id;
-    if(!$optionId){
-      $optionId = Capsule::table('tblproductconfigoptions')->insertGetId(['gid' => $groupId, 'optionname' => 'ipaddress|IP Address', 'optiontype' => 1]);
-      foreach ($ips as $id => $val) {
           Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => $id.'|'.$val], ['configid' => $optionId]);
       }
     }
