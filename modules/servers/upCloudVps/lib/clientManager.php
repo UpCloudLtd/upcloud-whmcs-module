@@ -77,6 +77,8 @@ class clientManager
                           'nic_model' => $details['nic_model'],
                           'timezone' => $details['timezone'],
                           'boot_order' => $details['boot_order'],
+                          'memory_amount' => $memoryGb,
+                          'core_number' => $details['core_number'],
                       ];
 
                       if (!empty($details['ip_addresses'])) {

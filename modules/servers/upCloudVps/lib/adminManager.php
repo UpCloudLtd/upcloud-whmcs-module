@@ -47,16 +47,19 @@ public function adminarea(){
   }
       if (!empty($details["ip_addresses"])) {
         foreach ($details['ip_addresses']['ip_address'] as $ip) {
-          $ReverseDNSValue = $this->manager->GetIPaddress($ip['address'])['response'];
-          if (strpos($ReverseDNSValue['ip_address']['ptr_record'], "upcloud") !== false) {
-            $this->manager->ModifyIPaddress($instanceId, $ip["address"], "client.".$_SERVER['SERVER_NAME'].".host");
+          if($ip['access'] != 'utility'){
+            $ReverseDNSValue = $this->manager->GetIPaddress($ip['address'])['response'];
+            if (strpos($ReverseDNSValue['ip_address']['ptr_record'], "upcloud") !== false) {
+              $this->manager->ModifyIPaddress($instanceId, $ip["address"], "client.".$_SERVER['SERVER_NAME'].".host");
+            }
+              $tableData[] = array($ip["address"], $ReverseDNSValue['ip_address']['ptr_record'], $ip["access"], $ip["family"]);
+          } else {
+            $tableData[] = array($ip["address"], "Not available for Utility IP Address", $ip["access"], $ip["family"]);
           }
-            $tableData[] = array($ip["address"], $ReverseDNSValue['ip_address']['ptr_record'], $ip["access"], $ip["family"]);
         }
         $aInt->sortableTableInit("nopagination");
         $interfaceInfo = $aInt->sortableTable(array($this->_LANG["IPAddress"], $this->_LANG["reversePTR"], $this->_LANG["Access"], $this->_LANG["Family"],), $tableData);
       }
-
 
         foreach ($this->manager->Getplans()['response']['plans']['plan'] as $Plan){
          if($Plan['name'] == $details['plan'] and $Plan['memory_amount'] == $details['memory_amount']){
@@ -80,6 +83,7 @@ public function adminarea(){
      </div>
      ' . $this->_LANG["TotalTraffic"] . ': ' . $TotalTraffic . ' ' . $this->_LANG["GB"] . ' – ' . $this->_LANG["used"] . ' ' . $Outgoing . ' ' . $this->_LANG["GB"] . ' (' . $Percentage . '%)';
          }
+
         }
 
 
@@ -138,14 +142,8 @@ public function adminarea(){
 
   $menu[$this->_LANG["VmInfo"]] = $output;
   $menu[$this->_LANG["Interface"]] = $interfaceInfo;
-
-  foreach ($this->manager->Getplans()['response']['plans']['plan'] as $Plan){
-   if($Plan['name'] == $details['plan'] and $Plan['memory_amount'] == $details['memory_amount']){
-  $menu[$this->_LANG["Bandwidth"]] = $Bandwidth;
-}
-}
   $menu[$this->_LANG["reversePTR"]] = $ReverseDNS;
-
+  $menu[$this->_LANG["Bandwidth"]] = $Bandwidth;
   return $menu;
 }
 

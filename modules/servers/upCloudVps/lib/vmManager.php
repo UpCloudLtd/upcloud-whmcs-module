@@ -66,15 +66,14 @@ class vmManager
     $sshkey = empty($sshkey) ? "na" : $sshkey;
     $user_data = empty($user_data) ? "na" : $user_data;
     $backup = $this->params['configoptions']['backup'];
-    $networking = "ipv4only";
 
     if($Plan == "custom"){
       $ram = $this->params['configoptions']['ram'];
       $vcpu = $this->params['configoptions']['vcpu'];
       $storage = $this->params['configoptions']['storage'];
-      $actionResponse = $this->manager->CreateServer($zone, $Hostname, $Plan, $OsUUID, $sshkey, $user_data, $backup, $networking, $ram, $vcpu, $storage);
+      $actionResponse = $this->manager->CreateServer($zone, $Hostname, $Plan, $OsUUID, $sshkey, $user_data, $backup, "ipv4only", $ram, $vcpu, $storage);
     } else {
-      $actionResponse = $this->manager->CreateServer($zone, $Hostname, $Plan, $OsUUID, $sshkey, $user_data, $backup, $networking);
+      $actionResponse = $this->manager->CreateServer($zone, $Hostname, $Plan, $OsUUID, $sshkey, $user_data, $backup, "ipv4only");
     }
     if($actionResponse['response_code'] == '202'){
 
