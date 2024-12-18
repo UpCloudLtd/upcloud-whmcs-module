@@ -19,6 +19,9 @@ border-radius:0px" class="alert alert-danger collapse alertUpCloud">
                 <caption>{$_LANG['overviewdetails']}</caption>
         <tbody>
         <tr> <th>{$_LANG['Hostname']}</th> <td id="vmhostname">{$vm['details']['hostname']}</td> </tr>
+        <tr> <th>{$_LANG['cpu']}</th> <td>{$vm['details']['core_number']}{$_LANG['core']}</td> </tr>
+        <tr> <th>{$_LANG['Disk']}</th> <td>{$vm['details']['diskSize']}{$_LANG['GB']}</td> </tr>
+        <tr> <th>{$_LANG['memory']}</th> <td>{$vm['details']['memory_amount']}{$_LANG['MB']}</td> </tr>
         <tr> <th>{$_LANG['IPAddress']}</th> <td>{$vm['details']['ip']}</td> </tr>
         <tr> <th>{$_LANG['username']}</th> <td>{$username}</td> </tr>
         <tr> <th>{$_LANG['password']}</th> <td class="col-sm-7 text-center" style="text-align: center;">
@@ -211,6 +214,8 @@ border-radius:0px" class="alert alert-danger collapse alertUpCloud">
     <select name="networkAdapter" id="networkAdapter" style="max-width: 400px;" class="form-control">
         <option value="e1000" {if $vm['details']['nic_model'] == 'e1000'} selected {/if}>Intel E1000 emulation</option>
         <option value="virtio" {if $vm['details']['nic_model'] == 'virtio'} selected {/if}>VirtIO</option>
+        <option value="scsi" {if $vm['details']['nic_model'] == 'scsi'} selected {/if}>SCSI</option>
+        <option value="ide" {if $vm['details']['nic_model'] == 'ide'} selected {/if}>ide</option>
         <option value="rtl8139" {if $vm['details']['nic_model'] == 'rtl8139'} selected {/if}>RealTek RTL8139 emulation</option>
     </select>
 

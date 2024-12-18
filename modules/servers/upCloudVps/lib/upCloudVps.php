@@ -38,6 +38,7 @@ class upCloudVps
   {
       curl_setopt($this->curl, CURLOPT_URL, $this->baseUrl . $url);
       curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $method);
+      curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
 
       if ($data !== null) {
           curl_setopt($this->curl, CURLOPT_POSTFIELDS, json_encode($data));
@@ -59,17 +60,19 @@ class upCloudVps
       if ($response === false) {
           throw new \Exception('Curl error: ' . curl_error($this->curl));
       }
-
-      logModuleCall(
-          'upCloudVps',
-          strtoupper($method),
-          $url.PHP_EOL.((!empty($data)) ? json_encode($data, JSON_PRETTY_PRINT) : ''),
-          json_decode($response, true),
-          json_decode($response, true),
-          []
-      );
-
-        return ['response_code' => $statusCode,  'response' => json_decode($response, true)];
+      $json_decoded_response = json_decode($response, true);
+      $CheckLog = Capsule::table('tblconfiguration')->where('setting', 'ModuleDebugMode')->value('value');
+      if($CheckLog == "on"){
+        logModuleCall(
+            'upCloudVps',
+            strtoupper($method),
+            $url.PHP_EOL.((!empty($data)) ? json_encode($data, JSON_PRETTY_PRINT) : ''),
+            $json_decoded_response,
+            $json_decoded_response,
+            []
+        );
+      }
+        return ['response_code' => $statusCode,  'response' => $json_decoded_response];
   }
 
   public function get($url)
@@ -156,6 +159,7 @@ foreach ($Templates as $Template){
 if ($Template['uuid'] == $OsUUID){
 $TemplateTitle = $Template['title'];
 $TemplateUUID = $Template['uuid'];
+$template_type = $Template['template_type'];
 break;
 }
 }
@@ -223,15 +227,35 @@ if(($Plan == "custom") && isset($ram) && isset($vcpu) && isset($storage)){
 
 }
 
-if($sshKey != "na"){
-  $postData['server']['login_user'] = [
-      'username' => 'root',
-      'ssh_keys' => [
-          'ssh_key' => [
-              $sshKey,
+if ($template_type == 'native') {
+  if(!preg_match('/Windows/', $TemplateTitle)){
+    if($sshKey != "na"){
+      $postData['server']['login_user'] = [
+          'username' => 'root',
+          'ssh_keys' => [
+              'ssh_key' => [
+                  $sshKey,
+              ],
           ],
-      ],
-  ];
+      ];
+    }
+  }
+}
+
+if ($template_type == 'cloud-init') {
+  if($sshKey != "na"){
+    $postData['server']['login_user'] = [
+        'username' => 'root',
+        'ssh_keys' => [
+            'ssh_key' => [
+                $sshKey,
+            ],
+        ],
+    ];
+  } else {
+    $error['response']['error']['error_message'] = 'ssh key required';
+    return $error;
+  }
 }
 
 if($networking == "ipv4only"){
@@ -327,7 +351,6 @@ public function ModifyServer($uuid, $Plan)
   }
 
 }
-
 
 public function modifyStorage($storageId, $planSize)
 {
