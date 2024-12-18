@@ -8,9 +8,9 @@ $_LANG["cpu"] = "CPU";
 $_LANG["OS"] = "Operating System";
 $_LANG["location"] = "Location";
 $_LANG["sshRsa"] = "Provide SSH public key in OpenSSH format";
-$_LANG["userData"] = "Cloud-init script for early initialization of cloud instances";
+$_LANG["userData"] = "Script for early initialization of cloud instances";
 $_LANG["Hostname"] = "Hostname";
-$_LANG["VMId"] = "Server ID";
+$_LANG["VMId"] = "VPS ID";
 $_LANG["Template"] = "Template";
 $_LANG["Plan"] = "Plan";
 $_LANG["Status"] = "Status";
@@ -19,7 +19,7 @@ $_LANG["IPAddress"] = "IP Address";
 $_LANG["Access"] = "Access";
 $_LANG["Family"] = "Family";
 $_LANG["Interface"] = "Interface";
-$_LANG["VmInfo"] = "Server Information";
+$_LANG["VmInfo"] = "VPS Information";
 $_LANG["vncEnabled"] = "VNC Enabled";
 $_LANG["vncPassword"] = "VNC Password";
 $_LANG["vncPort"] = "VNC Port";
@@ -54,8 +54,8 @@ $_LANG["password"] = "Password";
 $_LANG["username"] = "Username";
 $_LANG["IPAddresses"] = "IP Addresses";
 $_LANG["Action"] = "Action";
-$_LANG["basicdetails"] = "Server Basic Required Information";
-$_LANG["basicdescription"] = "Here are the essential day-to-day details you should keep readily accessible for connecting to your server whenever the need arises.";
+$_LANG["basicdetails"] = "VPS Basic Required Information";
+$_LANG["basicdescription"] = "Here are the essential day-to-day details you should keep readily accessible for connecting to your VPS whenever the need arises.";
 
 
 ///vnc
@@ -85,7 +85,7 @@ $_LANG['ip']['save']             = 'Save Changes';
 
 //server
 $_LANG['server']['title']                 = 'Server Configuration';
-$_LANG['server']['description']           = 'Your server configuration can be updated here. By adjusting default configurations, you\'re making changes that could potentially disrupt the typical behavior of your server.';
+$_LANG['server']['description']           = 'Your VPS configuration can be updated here. By adjusting the default configuration, you\'re making changes that could potentially disrupt the typical behavior of your VPS.';
 $_LANG['server']['edit']                  = 'Edit Server Configuration';
 $_LANG['server']['hostname']              = 'Hostname';
 $_LANG['server']['display']               = 'Display Adapter';
@@ -93,10 +93,10 @@ $_LANG['server']['network']               = 'Network Adapter';
 $_LANG['server']['timezone']              = 'Timezone';
 $_LANG['server']['boot']                  = 'Boot Order';
 $_LANG['server']['save']                  = 'Save Configuration';
-$_LANG['ajax']['saveServerConfiguration'] = "Server configuration has been saved successfully";
+$_LANG['ajax']['saveServerConfiguration'] = "VPS Configuration has been saved successfully";
 
 
 $_LANG["custom"] = "Custom";
 $_LANG["custDesc"] = "User Supplied Plans";
 $_LANG['bandwidth']['title']       = 'Bandwidth Graphs';
-$_LANG['bandwidth']['description'] = 'Your server usage over time can be viewed here.';
+$_LANG['bandwidth']['description'] = 'Your VPS bandwidth usage over time can be viewed here.';
