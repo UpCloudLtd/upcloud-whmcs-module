@@ -178,7 +178,7 @@ private function createLocationFields($groupId, $zones, $currencyId){
   private function ensureCustomFields($product)
 {
     $customFields = [
-        ['fieldname' => 'ssh_key|SSH Public Key', 'fieldtype' => 'textarea', 'description' => $this->_LANG["sshRsa"], 'regexpr' => "#ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}( [^@]+@[^@]+)?#", "showorder" => "on"],
+        ['fieldname' => 'ssh_key|SSH Public Key', 'fieldtype' => 'textarea', 'description' => $this->_LANG["sshRsa"], 'regexpr' => "#^(ssh-(rsa|dss|ed25519)|ecdsa-sha2-nistp(256|384|521)|sk-(ssh-ed25519|ecdsa-sha2-nistp256)@openssh\.com) AAAA[0-9A-Za-z+/]+[=]{0,3}( .*)?$#", "showorder" => "on"],
         ['fieldname' => 'instanceId|instance Id', 'fieldtype' => 'text', 'adminonly' => 'on'],
         ['fieldname' => 'userData|User Data', 'fieldtype' => 'textarea', 'description' => $this->_LANG["userData"], "showorder" => "on"]
     ];
