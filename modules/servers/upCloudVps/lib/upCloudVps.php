@@ -156,6 +156,7 @@ foreach ($Templates as $Template){
 if ($Template['uuid'] == $OsUUID){
 $TemplateTitle = $Template['title'];
 $TemplateUUID = $Template['uuid'];
+$TemplateType = $Template['template_type'];
 break;
 }
 }
@@ -232,6 +233,35 @@ if($sshKey != "na"){
           ],
       ],
   ];
+}
+
+if ($TemplateType == 'native') {
+    if (!preg_match('/Windows/', $TemplateTitle)) {
+        if ($sshKey != "na") {
+            $postData['server']['login_user'] = [
+                'username' => 'root',
+                'ssh_keys' => [
+                    'ssh_key' => [
+                        $sshKey,
+                    ],
+                ],
+            ];
+        }
+    }
+} elseif ($TemplateType == 'cloud-init') {
+    if ($sshKey != "na") {
+        $postData['server']['login_user'] = [
+            'username' => 'root',
+            'ssh_keys' => [
+                'ssh_key' => [
+                    $sshKey,
+                ],
+            ],
+        ];
+    } else {
+        $error['response']['error']['error_message'] = 'ssh key required';
+        return $error;
+    }
 }
 
 if($networking == "ipv4only"){
