@@ -181,6 +181,8 @@ If custom plans are utilised:
 - **vCPU**: Users can choose the vCPU of a VPS, ranging from 2 cores to 24 cores.
 - **Storage**: Users can choose the storage of a VPS, ranging from 50GB to 460GB.
 
+Note that custom plans are a discontinued feature. See the [UpCloud product documentation](https://upcloud.com/docs/products/cloud-servers/pricing/flexible-plans/) for more information.
+
 ## Adding Existing VPS to Users
 
 To add an existing UpCloud VPS to a user's account:
