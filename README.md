@@ -20,7 +20,7 @@ This is the official WHMCS provisioning module for [UpCloud](https://upcloud.com
 
 ## Installation
 
-See [docs/INSTALL.md] for instructions.
+See [INSTALL.md](docs/INSTALL.md) for instructions.
 
 ## Client Area Features
 
