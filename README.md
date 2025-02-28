@@ -58,27 +58,14 @@ modules/servers/upCloudVps/
 └── lang/                # Language files for internationalization
 ```
 
-### Key Functions
-
-The module provides the following key functions:
-
-- `upCloudVps_CreateAccount` - Provisions a new server
-- `upCloudVps_TerminateAccount` - Terminates a server
-- `upCloudVps_SuspendAccount` - Suspends a server
-- `upCloudVps_UnsuspendAccount` - Unsuspends a server
-- `upCloudVps_ChangePackage` - Changes the server plan
-- `upCloudVps_ClientArea` - Renders the client area interface
-- `upCloudVps_UsageUpdate` - Updates bandwidth usage statistics
-- `upCloudVps_StartVPS`, `upCloudVps_StopVPS`, `upCloudVps_RebootVPS` - Server power management
-
 ## Contributing
 
 Contributions to the UpCloud WHMCS module are welcome. To contribute:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+3. Commit your changes (`git commit`), prefer commit messages that adhere to [conventional commits](https://www.conventionalcommits.org)
+4. Push the branch (`git push -u origin feature/amazing-feature`)
 5. Open a Pull Request
 
 ## License

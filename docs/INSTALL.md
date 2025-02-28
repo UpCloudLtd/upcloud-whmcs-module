@@ -69,9 +69,9 @@ The UpCloud VPS Module for WHMCS is a versatile tool designed to assist business
 
 ### Obtaining API Credentials
 
-1. Access the URL "https://hub.upcloud.com/dashboard" and log in using your credentials.
-2. Navigate to the "People" section from the left sidebar or directly visit "https://hub.upcloud.com/people/accounts".
-3. Proceed to create a sub-account by selecting the "Create subaccount" button or visit "https://hub.upcloud.com/people/accounts/new".
+1. Access the UpCloud Hub at  https://hub.upcloud.com and log in using your credentials.
+2. Navigate to the "People" section from the left sidebar.
+3. Proceed to create a sub-account by selecting the "Create subaccount" button.
 4. Enter a username, password, and complete other required details (Personal Information), then click "Create subaccount" at the bottom.
 5. After creating the user, click on "Edit", then navigate to the Permissions section and click on "Go to permissions".
 6. Enable all permissions except "Control Panel" and save the changes.
@@ -124,7 +124,7 @@ Reference: https://docs.whmcs.com/Servers
 
 ![New Product](images/new_product.png)
 2. Configure the following details:
-   - **Product Type**: Select as "Other" (recommended to avoid prompting customers for Hostname, Password, NS1 & NS2 prefix during order process)
+   - **Product Type**: Select as "Other"
    - **Product Group**: Select the product group that you created
    - **Product Name**: Provide your product name
    - **Module**: UpCloud VPS
@@ -158,33 +158,28 @@ This will create custom fields named (`instanceId`, `ssh_key` & `userData`) as s
 
 ### Configurable Options
 
-The module will automatically create Configurable Options when you create your first product. You can adjust these options as needed.
+The module will automatically create Configurable Options when you create your first product. You can select option groups that apply to your product.
 
-#### If No Custom Plan is Selected
+To adjust these options:
 
-1. Go to System Settings -> Configurable Options and click on edit
+1. Go to System Settings -> Configurable Options
 2. Edit the newly created Options
 
-![Configurable Options](images/configurable_options.png)
+![Configurable Options](images/configurable_options_normal.png)
 
+Through these configurations you can:
 
-3. For Configurable Option "Location - template|Template", adjust the prices for Windows OS
+- Set custom pricing for backup options
+- Configure available locations
+- Configure available custom plans
+- Adjust prices for available images (such as Windows)
+- Backup and Location: set custom pricing for backup options, and configure available locations
 
-![OS prices](images/os_prices.png)
+If custom plans are utilised:
 
-4. For Configurable Option "location|Location", adjust as needed
-
-![Location](images/location.png)
-
-
-#### If Custom Plan is Selected
-
-If custom plan is selected, then a separate Configurable Option group is created with name "Configurable options for UpCloud - Custom Plans" and you will have additional options:
 - **Memory**: Users can choose the memory of a VPS, ranging from 4GB to 64GB.
 - **vCPU**: Users can choose the vCPU of a VPS, ranging from 2 cores to 24 cores.
 - **Storage**: Users can choose the storage of a VPS, ranging from 50GB to 460GB.
-
-![Configurable Options Custom](images/configurable_options_custom.png)
 
 ## Adding Existing VPS to Users
 
@@ -201,11 +196,6 @@ To add an existing UpCloud VPS to a user's account:
 - **User Data/Cloud-init**: If provided by the user, these scripts will initiate after VM creation to kickstart the initialization process.
 - **SSH Key**: If supplied by the user during VM creation, it will be utilized for user authentication instead of a password; otherwise, the system will default to using a password for authentication. Note that some templates only support SSH keys.
 - **Instance Id**: This field is used to assign a user with a VPS
-
-### System Settings -> Configurable Options
-
-- **Location**: It initially displays all available locations, which you can customize according to your needs.
-- **Images/OS Lists**: It compiles a comprehensive list of operating system images, and you even have the option to include your own custom images for VPS creation.
 
 ## Cron Job Setup
 
