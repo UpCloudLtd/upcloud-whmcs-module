@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "semantic-release": "24.2.3",
+    "@semantic-release/git": "10.0.1",
+    "semantic-release-replace-plugin": "1.2.7"
+  }
+}
