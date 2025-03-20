@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        with:
+          node-version: 22
+          check-latest: true
+          cache: npm
+      - name: Configure puppeteer to cache in npm cache dir
+        run: |
+          printf "PUPPETEER_CACHE_DIR=%s\n" "$(npm config get cache)/puppeteer-cache" >>"$GITHUB_ENV"
+      - name: Install dependencies
+        run: npm ci
+      - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WHMCSMP_USERNAME: ${{ secrets.WHMCSMP_USERNAME }}
+          WHMCSMP_PASSWORD: ${{ secrets.WHMCSMP_PASSWORD }}
+          WHMCSMP_PRODUCTID: "7770"
+          WHMCSMP_MINVERSION: "7.0"
+        run: npx semantic-release
