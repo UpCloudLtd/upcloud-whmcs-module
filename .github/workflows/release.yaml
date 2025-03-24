@@ -33,5 +33,5 @@ jobs:
           WHMCSMP_LOGIN: ${{ secrets.WHMCSMP_LOGIN }}
           WHMCSMP_PASSWORD: ${{ secrets.WHMCSMP_PASSWORD }}
           WHMCSMP_PRODUCTID: "7770"
-          WHMCSMP_MINVERSION: "7.0"
+          WHMCSMP_MINVERSION: "8.10"
         run: npx semantic-release
