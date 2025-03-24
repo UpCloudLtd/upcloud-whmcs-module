@@ -14,8 +14,7 @@ This is the official WHMCS provisioning module for [UpCloud](https://upcloud.com
 
 ## Requirements
 
-- WHMCS 7.x or later
-- PHP 7.0 or later
+- WHMCS 8.10 or later
 - UpCloud API credentials
 
 ## Installation
