@@ -9,10 +9,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -29,7 +25,7 @@ jobs:
         run: npm ci
       - name: Release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           WHMCSMP_LOGIN: ${{ secrets.WHMCSMP_LOGIN }}
           WHMCSMP_PASSWORD: ${{ secrets.WHMCSMP_PASSWORD }}
           WHMCSMP_PRODUCTID: "7770"
