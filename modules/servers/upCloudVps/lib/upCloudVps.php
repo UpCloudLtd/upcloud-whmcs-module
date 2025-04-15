@@ -463,8 +463,8 @@ return round($bytes / (pow(1024, $exp)), $precision).' '.$unit[$exp];
 public function CurrencyConvert($fromCurrency, $toCurrency, $amount)
 {
 $amount_from_db = Capsule::table('tblcurrencies')->where('code', $toCurrency)->get();
-$exhangeRate_whmcs = json_decode($amount_from_db, true)[0]['rate'];
-$convertedAmount = $amount * $exhangeRate_whmcs;
+$exchangeRate_whmcs = json_decode($amount_from_db, true)[0]['rate'];
+$convertedAmount = $amount * $exchangeRate_whmcs;
 return array(  'convertedAmount' => round($convertedAmount, 2) );
 }
 
