@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  FORCE_COLOR: 1            # semantic-release (and unknowns)
+  NPM_CONFIG_COLOR: always  # npm and friends
+
 jobs:
   release:
     name: Release
