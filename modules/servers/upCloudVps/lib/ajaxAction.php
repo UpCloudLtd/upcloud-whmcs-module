@@ -2,8 +2,8 @@
 
 namespace WHMCS\Module\Server\upCloudVps;
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use WHMCS\Database\Capsule;
@@ -78,10 +78,10 @@ class ajaxAction
         $ips = $details['response']['server']['ip_addresses']['ip_address'];
         foreach ($ips as $ip) {
             $ReverseDNSValue = $this->manager->GetIPaddress($ip['address'])['response']['ip_address']['ptr_record'];
-            if (strpos($ReverseDNSValue, "upcloud") !== false) {
-                $this->manager->ModifyIPaddress($this->instanceId, $ip["address"], "client." . $_SERVER['SERVER_NAME'] . ".host");
+            if (strpos($ReverseDNSValue, 'upcloud') !== false) {
+                $this->manager->ModifyIPaddress($this->instanceId, $ip['address'], 'client.' . $_SERVER['SERVER_NAME'] . '.host');
             }
-            $btn = ($ip['access'] == "utility") ? "" : '<button class="btn btn-primary editIp" data-toggle="modal" data-target="#editPtrModal" data-ip="' . $ip['address'] . '" data-ptr="' . $ReverseDNSValue . '"><i class="btn-icon fa fa-pencil fa-lg"></i></button>';
+            $btn = ($ip['access'] == 'utility') ? '' : '<button class="btn btn-primary editIp" data-toggle="modal" data-target="#editPtrModal" data-ip="' . $ip['address'] . '" data-ptr="' . $ReverseDNSValue . '"><i class="btn-icon fa fa-pencil fa-lg"></i></button>';
             $output[] = [
                 ucfirst($ip['access']) . ' ' . $ip['family'],
                 $ip['address'],

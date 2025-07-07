@@ -1,7 +1,7 @@
 <?php
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use App;
@@ -160,8 +160,8 @@ function upCloudVps_AdminCustomButtonArray()
 function upCloudVps_ReverseDNS($params)
 {
     try {
-        $params["ip"] = $_POST['ip'];
-        $params["rdns"] = $_POST['rdns'];
+        $params['ip'] = $_POST['ip'];
+        $params['rdns'] = $_POST['rdns'];
         $vmManager = new vmManager($params);
         return $vmManager->rdns();
     } catch (\Exception $e) {

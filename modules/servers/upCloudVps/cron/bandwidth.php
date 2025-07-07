@@ -1,6 +1,6 @@
 <?php
 
-date_default_timezone_set("UTC");
+date_default_timezone_set('UTC');
 
 $rootdir = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 require_once $rootdir . '/init.php';
