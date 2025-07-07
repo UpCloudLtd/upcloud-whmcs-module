@@ -2,8 +2,8 @@
 
 namespace WHMCS\Module\Server\upCloudVps;
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use WHMCS\Database\Capsule;
@@ -71,7 +71,7 @@ class configOptions
             if (!$groupIdLinks) {
                 Capsule::table('tblproductconfiglinks')->insert(['gid' => $groupId, 'pid' => $product->id]);
             }
-            $pomTemplates = $this->getTemplateIds("cloudinit");
+            $pomTemplates = $this->getTemplateIds('cloudinit');
             $this->createTemplateFields($groupId, $pomTemplates, $currencyId, $currencyCode);
         }
     }
@@ -87,7 +87,7 @@ class configOptions
             if (!$groupIdLinks) {
                 Capsule::table('tblproductconfiglinks')->insert(['gid' => $groupId, 'pid' => $product->id]);
             }
-            $pomTemplates = $this->getTemplateIds("nativelinux");
+            $pomTemplates = $this->getTemplateIds('nativelinux');
             $this->createTemplateFields($groupId, $pomTemplates, $currencyId, $currencyCode);
         }
     }
@@ -103,7 +103,7 @@ class configOptions
             if (!$groupIdLinks) {
                 Capsule::table('tblproductconfiglinks')->insert(['gid' => $groupId, 'pid' => $product->id]);
             }
-            $pomTemplates = $this->getTemplateIds("nativewindows");
+            $pomTemplates = $this->getTemplateIds('nativewindows');
             $this->createTemplateFields($groupId, $pomTemplates, $currencyId, $currencyCode);
         }
     }
@@ -148,8 +148,8 @@ class configOptions
                 Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => $mem . '|' . $mvals], ['configid' => $optionId]);
             }
             foreach (Capsule::table('tblproductconfigoptionssub')->where('configid', $optionId)->get() as $id) {
-                $parts = explode("|", $id->optionname);
-                $fprice = $parts[0] * "2";
+                $parts = explode('|', $id->optionname);
+                $fprice = $parts[0] * '2';
                 $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, $fprice);
                 Capsule::table('tblpricing')->updateOrInsert(['type' => 'configoptions', 'relid' => $id->id, 'monthly' => $monthlys['convertedAmount']], ['currency' => $currencyId]);
             }
@@ -169,8 +169,8 @@ class configOptions
                 Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => $cpu . '|' . $cvals], ['configid' => $optionId]);
             }
             foreach (Capsule::table('tblproductconfigoptionssub')->where('configid', $optionId)->get() as $id) {
-                $parts = explode("|", $id->optionname);
-                $fprice = $parts[0] * "6";
+                $parts = explode('|', $id->optionname);
+                $fprice = $parts[0] * '6';
                 $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, $fprice);
                 Capsule::table('tblpricing')->updateOrInsert(['type' => 'configoptions', 'relid' => $id->id, 'monthly' => $monthlys['convertedAmount']], ['currency' => $currencyId]);
             }
@@ -190,8 +190,8 @@ class configOptions
                 Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => $storage . '|' . $vals], ['configid' => $optionId]);
             }
             foreach (Capsule::table('tblproductconfigoptionssub')->where('configid', $optionId)->get() as $id) {
-                $parts = explode("|", $id->optionname);
-                $fprice = $parts[0] * "0.10";
+                $parts = explode('|', $id->optionname);
+                $fprice = $parts[0] * '0.10';
                 $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, $fprice);
                 Capsule::table('tblpricing')->updateOrInsert(['type' => 'configoptions', 'relid' => $id->id, 'monthly' => $monthlys['convertedAmount']], ['currency' => $currencyId]);
             }
@@ -207,12 +207,12 @@ class configOptions
                 Capsule::table('tblproductconfigoptionssub')->updateOrInsert(['optionname' => $id . '|' . $val], ['configid' => $optionId]);
             }
             foreach (Capsule::table('tblproductconfigoptionssub')->where('configid', $optionId)->get() as $id) {
-                if (strpos($id->optionname, "Datacenter") !== false) {
-                    $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, "25");
-                } elseif (strpos($id->optionname, "Standard") !== false) {
-                    $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, "10");
+                if (strpos($id->optionname, 'Datacenter') !== false) {
+                    $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, '25');
+                } elseif (strpos($id->optionname, 'Standard') !== false) {
+                    $monthlys = $this->manager->CurrencyConvert('EUR', $currencyCode, '10');
                 } else {
-                    $monthlys['convertedAmount'] = "0.00";
+                    $monthlys['convertedAmount'] = '0.00';
                 }
                 Capsule::table('tblpricing')->updateOrInsert(['type' => 'configoptions', 'relid' => $id->id, 'monthly' => $monthlys['convertedAmount']], ['currency' => $currencyId]);
             }
@@ -236,9 +236,9 @@ class configOptions
     private function ensureCustomFields($product)
     {
         $customFields = [
-            ['fieldname' => 'ssh_key|SSH Public Key', 'fieldtype' => 'textarea', 'description' => $this->_LANG["sshRsa"], 'regexpr' => "#^(ssh-(rsa|dss|ed25519)|ecdsa-sha2-nistp(256|384|521)|sk-(ssh-ed25519|ecdsa-sha2-nistp256)@openssh\.com) AAAA[0-9A-Za-z+/]+[=]{0,3}( .*)?$#", "showorder" => "on"],
+            ['fieldname' => 'ssh_key|SSH Public Key', 'fieldtype' => 'textarea', 'description' => $this->_LANG['sshRsa'], 'regexpr' => '#^(ssh-(rsa|dss|ed25519)|ecdsa-sha2-nistp(256|384|521)|sk-(ssh-ed25519|ecdsa-sha2-nistp256)@openssh\.com) AAAA[0-9A-Za-z+/]+[=]{0,3}( .*)?$#', 'showorder' => 'on'],
             ['fieldname' => 'instanceId|instance Id', 'fieldtype' => 'text', 'adminonly' => 'on'],
-            ['fieldname' => 'userData|User Data', 'fieldtype' => 'textarea', 'description' => $this->_LANG["userData"], "showorder" => "on"]
+            ['fieldname' => 'userData|User Data', 'fieldtype' => 'textarea', 'description' => $this->_LANG['userData'], 'showorder' => 'on']
         ];
         foreach ($customFields as $field) {
             if (empty(Capsule::table('tblcustomfields')->where('fieldname', $field['fieldname'])->where('relid', $product->id)->value('relid'))) {
@@ -249,11 +249,11 @@ class configOptions
 
     private function getBackups()
     {
-        $backups['no'] = "Disable";
-        $backups['daily'] = "Daily (Day Plan)";
-        $backups['dailies'] = "Dailies (Week Plan)";
-        $backups['weeklies'] = "Weeklies (Month Plan)";
-        $backups['monthlies'] = "Monthlies (Year Plan)";
+        $backups['no'] = 'Disable';
+        $backups['daily'] = 'Daily (Day Plan)';
+        $backups['dailies'] = 'Dailies (Week Plan)';
+        $backups['weeklies'] = 'Weeklies (Month Plan)';
+        $backups['monthlies'] = 'Monthlies (Year Plan)';
         return $backups;
     }
 
@@ -280,10 +280,10 @@ class configOptions
         } else {
             foreach ($templates as $template) {
                 if (
-                    ($template['template_type'] == "native" &&
+                    ($template['template_type'] == 'native' &&
                         (($vmtype == 'nativewindows' && preg_match('/Windows/', $template['title'])) ||
                             ($vmtype == 'nativelinux' && !preg_match('/Windows/', $template['title'])))) ||
-                    $template['template_type'] == "cloud-init" && $vmtype == 'cloudinit'
+                    $template['template_type'] == 'cloud-init' && $vmtype == 'cloudinit'
                 ) {
                     $templateIds[$template['uuid']] = $template['title'];
                 }

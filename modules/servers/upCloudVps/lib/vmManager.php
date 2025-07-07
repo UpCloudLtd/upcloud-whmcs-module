@@ -2,8 +2,8 @@
 
 namespace WHMCS\Module\Server\upCloudVps;
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use WHMCS\Database\Capsule;
@@ -51,11 +51,11 @@ class vmManager
     public function terminate()
     {
         $instanceId = $this->params['model']->serviceProperties->get('instanceId|instance Id');
-        $delete = ($this->params['configoptions']['backup'] == "no") ? $this->manager->DeleteServernStorage($instanceId) : $this->manager->DeleteServernStorageBackup($instanceId);
+        $delete = ($this->params['configoptions']['backup'] == 'no') ? $this->manager->DeleteServernStorage($instanceId) : $this->manager->DeleteServernStorageBackup($instanceId);
         if ($delete['response_code'] == '204') {
-            $this->params['model']->serviceProperties->save(['instanceId|instance Id' => ""]);
+            $this->params['model']->serviceProperties->save(['instanceId|instance Id' => '']);
             Capsule::table('mod_upCloudVps_bandwidth')->where('serviceId', '=', $this->params['serviceid'])->delete();
-            $message = "success";
+            $message = 'success';
         } else {
             $message = $delete['response']['error']['error_message'];
         }
@@ -70,11 +70,11 @@ class vmManager
         $sshkey = $this->params['customfields']['ssh_key'];
         $user_data = $this->params['customfields']['userData'];
         $Hostname = !empty($this->params['domain']) ? $this->params['domain'] : 'client' . $this->params['serviceid'] . '.' . $_SERVER['SERVER_NAME'];
-        $sshkey = empty($sshkey) ? "na" : $sshkey;
-        $user_data = empty($user_data) ? "na" : $user_data;
+        $sshkey = empty($sshkey) ? 'na' : $sshkey;
+        $user_data = empty($user_data) ? 'na' : $user_data;
         $backup = $this->params['configoptions']['backup'];
-        $networking = "ipv4only";
-        if ($Plan == "custom") {
+        $networking = 'ipv4only';
+        if ($Plan == 'custom') {
             $ram = $this->params['configoptions']['ram'];
             $vcpu = $this->params['configoptions']['vcpu'];
             $storage = $this->params['configoptions']['storage'];
@@ -84,10 +84,10 @@ class vmManager
         }
         if ($actionResponse['response_code'] == '202') {
             foreach ($actionResponse['response']['server']['ip_addresses']['ip_address'] as $IPList) {
-                if ($IPList['access'] == "public") {
-                    if ($IPList['family'] == "IPv4" && ($IPList['part_of_plan'] || $Plan == "custom")) {
+                if ($IPList['access'] == 'public') {
+                    if ($IPList['family'] == 'IPv4' && ($IPList['part_of_plan'] || $Plan == 'custom')) {
                         $IPv4 = $IPList['address'];
-                    } elseif ($IPList['family'] == "IPv6") {
+                    } elseif ($IPList['family'] == 'IPv6') {
                         $IPv6 = $IPList['address'];
                     }
                 }
@@ -116,13 +116,13 @@ class vmManager
         $DNSValue = $this->params['rdns'];
         $instanceId = $this->params['model']->serviceProperties->get('instanceId|instance Id');
         $data = $this->manager->ModifyIPaddress($instanceId, $ip, $DNSValue);
-        return $data['response_code'] == "202" ? 'success' : $data['response']['error']['error_message'];
+        return $data['response_code'] == '202' ? 'success' : $data['response']['error']['error_message'];
     }
 
     public function upgradePlan()
     {
         $Plan = $this->params['configoption2'];
-        if ($Plan == "custom") {
+        if ($Plan == 'custom') {
             return [];
         } else {
             $instanceId = $this->params['model']->serviceProperties->get('instanceId|instance Id');

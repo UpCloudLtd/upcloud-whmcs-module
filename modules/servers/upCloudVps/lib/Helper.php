@@ -2,8 +2,8 @@
 
 namespace WHMCS\Module\Server\upCloudVps;
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use WHMCS\View\Menu\Item as MenuItem;
@@ -47,21 +47,21 @@ class Helper
                 } else {
                     $results['message'] = (!empty($_LANG['ajax'][$action])) ? $_LANG['ajax'][$action] : $_LANG['ajax']['action']['success'];
                     switch ($action) {
-                        case "refreshServer":
+                        case 'refreshServer':
                             $results['data']['details']['status'] = $details['response']['server']['state'];
                             $results['data']['details']['statusLang'] = $_LANG['status'][$details['response']['server']['state']];
 
                             break;
-                        case "vncDetails":
+                        case 'vncDetails':
                             $results['vnchost'] = $details['vnchost'];
                             $results['vncport'] = $details['vncport'];
 
                             break;
-                        case "getIpAddresses":
+                        case 'getIpAddresses':
                             $results = $details;
 
                             break;
-                        case "getBandwidth":
+                        case 'getBandwidth':
                             $results = $details;
 
                             break;

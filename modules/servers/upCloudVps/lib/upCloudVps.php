@@ -2,8 +2,8 @@
 
 namespace WHMCS\Module\Server\upCloudVps;
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use WHMCS\Database\Capsule;
@@ -151,7 +151,7 @@ class upCloudVps
             }
         }
 
-        if (($Plan == "custom") && isset($ram) && isset($vcpu) && isset($storage)) {
+        if (($Plan == 'custom') && isset($ram) && isset($vcpu) && isset($storage)) {
             $postData = [
                 'server' => [
                     'metadata' => 'yes',
@@ -159,15 +159,15 @@ class upCloudVps
                     'title' => $Hostname, // hostname
                     'hostname' => $Hostname, // hostname
                     'remote_access_enabled' => 'yes',
-                    "core_number" => (int) $vcpu,
-                    "memory_amount" => (int) "1024" * (int) $ram,
+                    'core_number' => (int) $vcpu,
+                    'memory_amount' => (int) '1024' * (int) $ram,
                     'storage_devices' => [
                         'storage_device' => [
                             [
                                 'action' => 'clone',
                                 'storage' => $TemplateUUID, // GetTemplates()
                                 'size' => $storage,
-                                'tier' => "maxiops",
+                                'tier' => 'maxiops',
                                 'title' => $TemplateTitle, // OS Name
                             ]
                         ]
@@ -208,7 +208,7 @@ class upCloudVps
             ];
         }
 
-        if ($sshKey != "na") {
+        if ($sshKey != 'na') {
             $postData['server']['login_user'] = [
                 'username' => 'root',
                 'ssh_keys' => [
@@ -221,7 +221,7 @@ class upCloudVps
 
         if ($TemplateType == 'native') {
             if (!preg_match('/Windows/', $TemplateTitle)) {
-                if ($sshKey != "na") {
+                if ($sshKey != 'na') {
                     $postData['server']['login_user'] = [
                         'username' => 'root',
                         'ssh_keys' => [
@@ -233,7 +233,7 @@ class upCloudVps
                 }
             }
         } elseif ($TemplateType == 'cloud-init') {
-            if ($sshKey != "na") {
+            if ($sshKey != 'na') {
                 $postData['server']['login_user'] = [
                     'username' => 'root',
                     'ssh_keys' => [
@@ -248,31 +248,31 @@ class upCloudVps
             }
         }
 
-        if ($networking == "ipv4only") {
+        if ($networking == 'ipv4only') {
             $postData['server']['networking'] = [
-                "interfaces" => [
-                    "interface" => [
+                'interfaces' => [
+                    'interface' => [
                         [
-                            "ip_addresses" => [
-                                "ip_address" => [
+                            'ip_addresses' => [
+                                'ip_address' => [
                                     [
-                                        "family" => "IPv4"
+                                        'family' => 'IPv4'
                                     ]
                                 ]
                             ],
-                            "type" => "public"
+                            'type' => 'public'
                         ]
                     ]
                 ]
             ];
         }
 
-        if ($user_data != "na") {
+        if ($user_data != 'na') {
             $postData['server']['user_data'] = $user_data;
         }
 
-        if ($backup != "no") {
-            $postData['server']['simple_backup'] = "0100," . $backup;
+        if ($backup != 'no') {
+            $postData['server']['simple_backup'] = '0100,' . $backup;
         }
 
         return $this->post('server', $postData);
@@ -283,7 +283,7 @@ class upCloudVps
         $data = array();
         if ($stop_type !== null) {
             $data[$action . '_server']['stop_type'] = $stop_type;
-            $data[$action . '_server']['timeout'] = "60";
+            $data[$action . '_server']['timeout'] = '60';
         }
         return $this->post('server/' . $ServerUUID . '/' . $action, $data);
     }
@@ -330,7 +330,7 @@ class upCloudVps
         } else {
             $storages = $this->GetServer($uuid)['response']['server']['storage_devices']['storage_device'];
             foreach ($storages as $storage) {
-                if ($storage['part_of_plan'] == "yes") {
+                if ($storage['part_of_plan'] == 'yes') {
                     $storageId = $storage['storage'];
                     $existingStorageSize = $storage['storage_size'];
                     break;
@@ -441,7 +441,7 @@ class upCloudVps
 
     public function formatBytes($bytes, $precision = 2)
     {
-        $unit = ["B", "KB", "MB", "GB", "TB"];
+        $unit = ['B', 'KB', 'MB', 'GB', 'TB'];
         $exp = floor(log($bytes, 1024)) | 0;
         return round($bytes / (pow(1024, $exp)), $precision) . ' ' . $unit[$exp];
     }

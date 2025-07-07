@@ -2,8 +2,8 @@
 
 namespace WHMCS\Module\Server\upCloudVps;
 
-if (!defined("WHMCS")) {
-    die("This file cannot be accessed directly");
+if (!defined('WHMCS')) {
+    die('This file cannot be accessed directly');
 }
 
 use WHMCS\Module\Server\upCloudVps\upCloudVps;
@@ -39,7 +39,7 @@ class clientManager
                         }
 
                         foreach ($templ as $temp) {
-                            if ($temp['part_of_plan'] == "yes" || $details['plan'] == "custom") {
+                            if ($temp['part_of_plan'] == 'yes' || $details['plan'] == 'custom') {
                                 $details['osname'] = $temp['storage_title'];
                                 $details['base_storage_size'] = $temp['storage_size'];
                                 break;
