@@ -1,0 +1,8 @@
+{
+    "name": "upcloudltd/upcloud-whmcs-module",
+    "description": "UpCloud WHMCS module",
+    "license": "MIT",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.13.2"
+    }
+}

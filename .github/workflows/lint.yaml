@@ -1,0 +1,29 @@
+name: Lint
+
+on:
+  - pull_request
+
+jobs:
+  phpcbf:
+    name: phpcbf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Get composer cache dir
+        run: printf "dir=%s\n" "$(composer config cache-files-dir)" >>"$GITHUB_OUTPUT"
+        id: get-composer-cache-dir
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          # https://github.com/actions/cache/blob/main/examples.md#php---composer
+          path: ${{ steps.get-composer-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - run: composer --ansi install
+      - name: Run phpcbf
+        run: |
+          set -x +e
+          rc=0
+          vendor/bin/phpcbf --runtime-set php_version 70200 --colors .; ((rc+=$?))
+          git diff --color --exit-code; ((rc+=$?))
+          ((rc==0))

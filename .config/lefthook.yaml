@@ -1,0 +1,11 @@
+min_version: 1.11.13
+
+pre-commit:
+  jobs:
+    - name: phpcbf
+      glob:
+        - "*.php"
+      exclude:
+        - vendor/*
+      run: |
+        vendor/bin/phpcbf --runtime-set php_version 70200 {staged_files}
