@@ -159,7 +159,6 @@ class upCloudVps
                     'title' => $Hostname, // hostname
                     'hostname' => $Hostname, // hostname
                     'remote_access_enabled' => 'yes',
-                    //"simple_backup" => "0430,weeklies",
                     "core_number" => (int) $vcpu,
                     "memory_amount" => (int) "1024" * (int) $ram,
                     'storage_devices' => [
@@ -193,7 +192,6 @@ class upCloudVps
                     'title' => $Hostname, // hostname
                     'hostname' => $Hostname, // hostname
                     'plan' => $PlanName, // Getplans()
-                    //  "simple_backup" => "0430,weeklies",
                     'remote_access_enabled' => 'yes',
                     'storage_devices' => [
                         'storage_device' => [
