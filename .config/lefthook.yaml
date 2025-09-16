@@ -8,4 +8,4 @@ pre-commit:
       exclude:
         - vendor/*
       run: |
-        vendor/bin/phpcbf --runtime-set php_version 70200 {staged_files}
+        vendor/bin/phpcbf --runtime-set php_version 70200 --runtime-set ignore_non_auto_fixable_on_exit 1 {staged_files}

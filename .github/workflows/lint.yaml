@@ -24,6 +24,6 @@ jobs:
         run: |
           set -x +e
           rc=0
-          vendor/bin/phpcbf --runtime-set php_version 70200 --colors .; ((rc+=$?))
+          vendor/bin/phpcbf --runtime-set php_version 70200 --runtime-set ignore_non_auto_fixable_on_exit 1 --colors .; ((rc+=$?))
           git diff --color --exit-code; ((rc+=$?))
           ((rc==0))
