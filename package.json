@@ -3,6 +3,6 @@
     "semantic-release": "24.2.5",
     "@semantic-release/git": "10.0.1",
     "semantic-release-replace-plugin": "1.2.7",
-    "@hexonet/semantic-release-whmcs": "5.0.59"
+    "@hexonet/semantic-release-whmcs": "5.1.6"
   }
 }
