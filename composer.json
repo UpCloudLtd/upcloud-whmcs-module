@@ -3,6 +3,6 @@
     "description": "UpCloud WHMCS module",
     "license": "MIT",
     "require-dev": {
-        "squizlabs/php_codesniffer": "4.0.0"
+        "squizlabs/php_codesniffer": "4.0.1"
     }
 }
