@@ -19,7 +19,7 @@ class upCloudVps
     {
         $user = $params['serverusername'];
         $password = $params['serverpassword'];
-        $this->baseUrl = 'https://api.upcloud.com/1.3/';
+        $this->baseUrl = "https://{$params['serverhostname']}/1.3/";
         $this->curl = curl_init();
         curl_setopt_array($this->curl, [
             CURLOPT_USERAGENT => 'upcloud-whmcs-module/' . MODULE_VERSION,
