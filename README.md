@@ -1,5 +1,7 @@
 # UpCloud WHMCS Module
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/UpCloudLtd/upcloud-whmcs-module/badge)](https://scorecard.dev/viewer/?uri=github.com%2FUpCloudLtd%2Fupcloud-whmcs-module)
+
 This is the official WHMCS provisioning module for [UpCloud](https://upcloud.com/), allowing you to offer and manage UpCloud VPS services through your WHMCS installation.
 
 ## Features
