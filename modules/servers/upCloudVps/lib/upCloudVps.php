@@ -58,8 +58,16 @@ class upCloudVps
             throw new \Exception('Curl error: ' . curl_error($this->curl));
         }
 
-        logModuleCall('upCloudVps', strtoupper($method), $url . PHP_EOL . ((!empty($data)) ? json_encode($data, JSON_PRETTY_PRINT) : ''), json_decode($response, true), json_decode($response, true), []);
-        return ['response_code' => $statusCode, 'response' => json_decode($response, true)];
+        $respDecoded = json_decode($response, true);
+        logModuleCall(
+            'upCloudVps',
+            strtoupper($method),
+            $url . PHP_EOL . (!empty($data) ? json_encode($data, JSON_PRETTY_PRINT) : ''),
+            $response,
+            $respDecoded,
+            []
+        );
+        return ['response_code' => $statusCode, 'response' => $respDecoded];
     }
 
     public function get($url)
